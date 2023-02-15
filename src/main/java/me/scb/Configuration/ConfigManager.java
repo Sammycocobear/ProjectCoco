@@ -29,7 +29,7 @@ public class ConfigManager {
 
     public void defaults(){
         FileConfiguration config = getConfig();
-        final String path = "Abilities.Sand.";
+        String path = "Abilities.Sand.";
         config.addDefault(path + "SandTornado.Cooldown",5000);
         config.addDefault(path + "SandTornado.SourceRange",10);
         config.addDefault(path + "SandTornado.Range",20);
@@ -46,6 +46,12 @@ public class ConfigManager {
         config.addDefault(path + "QuickSand.Cooldown",5000);
         config.addDefault(path + "QuickSand.Radius",5);
         config.addDefault(path + "QuickSand.RadiusIncreaseDelay",250);
+
+        path = "Abilities.Chi.";
+        config.addDefault(path + "ChameleonSuit.Cooldown", 6000);
+        config.addDefault(path + "ChameleonSuit.DetectionDistance", 3.0);
+        config.addDefault(path + "ChameleonSuit.DisengageOnHit", true);
+        config.addDefault(path + "ChameleonSuit.SpeedPotency", 4);
 
         config.options().copyDefaults(true);
         ProjectCoco.getPlugin().saveConfig();

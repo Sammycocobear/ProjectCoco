@@ -1,7 +1,11 @@
 package me.scb.Listener;
 
 import com.projectkorra.projectkorra.BendingPlayer;
+import com.projectkorra.projectkorra.ability.Ability;
 import com.projectkorra.projectkorra.ability.CoreAbility;
+import com.projectkorra.projectkorra.ability.PassiveAbility;
+import com.projectkorra.projectkorra.event.AbilityStartEvent;
+import me.scb.Abilities.Chi.ChameleonSuit;
 import me.scb.Abilities.Earth.Sand.QuickSand;
 import me.scb.Abilities.Earth.Sand.SandTornado;
 import me.scb.Abilities.Fire.Combustion.CombustionBomb;
@@ -14,7 +18,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
@@ -53,6 +59,12 @@ public class AbilityListener implements Listener {
             new QuickSand(player);
         }else if (bound.equalsIgnoreCase("CombustionBomb")){
             new CombustionBomb(player);
+        } else if (bound.equalsIgnoreCase("ChameleonSuit")) {
+            final ChameleonSuit suit = CoreAbility.getAbility(player, ChameleonSuit.class);
+            if (suit != null)
+                suit.remove();
+            else
+                new ChameleonSuit(player);
         }
     }
 
@@ -79,5 +91,48 @@ public class AbilityListener implements Listener {
         if (e.getEntity().hasMetadata("ProjectCoco://TempFallingBlock")){
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void onTarget(final EntityTargetLivingEntityEvent event) {
+        if (!(event.getTarget() instanceof Player))
+            return;
+
+        final Player player = (Player) event.getTarget();
+        final ChameleonSuit suit = CoreAbility.getAbility(player, ChameleonSuit.class);
+        if (suit != null && !suit.canSeePlayer(event.getEntity()))
+            event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onAbilityStart(final AbilityStartEvent event) {
+        final Ability ability = event.getAbility();
+        if (ability instanceof PassiveAbility)
+            return;
+
+        final ChameleonSuit suit = CoreAbility.getAbility(ability.getPlayer(), ChameleonSuit.class);
+        if (suit != null)
+            suit.remove();
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onDamageDealt(final EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player))
+            return;
+
+        final ChameleonSuit suit = CoreAbility.getAbility((Player) event.getDamager(), ChameleonSuit.class);
+        if (suit != null)
+            suit.remove();
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onDamage(final EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player))
+            return;
+
+        final Player player = (Player) event.getEntity();
+        final ChameleonSuit suit = CoreAbility.getAbility(player, ChameleonSuit.class);
+        if (suit != null && suit.shouldDisengageOnHit())
+            suit.remove();
     }
 }
