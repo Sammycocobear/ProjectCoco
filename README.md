@@ -6,7 +6,8 @@ Fire
 > CombustionBomb
 
 Earth
-> SandTornado
+> SandTornado 
+
 > QuickSand
 
 # Installation
