@@ -1,6 +1,5 @@
 package me.scb.Abilities.Fire.Combustion;
 
-import com.google.gson.JsonArray;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.CombustionAbility;

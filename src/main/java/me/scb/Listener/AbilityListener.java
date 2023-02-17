@@ -2,9 +2,12 @@ package me.scb.Listener;
 
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.CoreAbility;
+import me.scb.Abilities.Earth.Lava.Erupt;
+import me.scb.Abilities.Earth.Lava.LavaBall;
 import me.scb.Abilities.Earth.Sand.QuickSand;
 import me.scb.Abilities.Earth.Sand.SandTornado;
 import me.scb.Abilities.Fire.Combustion.CombustionBomb;
+import me.scb.Abilities.Fire.Lightning.Railgun;
 import me.scb.Utils.FallDamageRemoval;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -34,6 +37,10 @@ public class AbilityListener implements Listener {
             }else{
                 new SandTornado(player);
             }
+        }else if (bound.equalsIgnoreCase("LavaBall")){
+            new LavaBall(player);
+        }else if (bound.equalsIgnoreCase("Railgun")){
+            new Railgun(player);
         }
     }
 
@@ -53,6 +60,8 @@ public class AbilityListener implements Listener {
             new QuickSand(player);
         }else if (bound.equalsIgnoreCase("CombustionBomb")){
             new CombustionBomb(player);
+        }else if (bound.equalsIgnoreCase("Erupt")){
+            new Erupt(player);
         }
     }
 

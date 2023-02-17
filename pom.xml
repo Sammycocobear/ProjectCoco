@@ -43,6 +43,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
         <resources>
             <resource>
@@ -79,6 +80,12 @@
             <artifactId>ProjectKorra</artifactId>
             <version>v1.9.3</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.elmakers.mine.bukkit</groupId>
+            <artifactId>EffectLib</artifactId>
+            <version>9.4</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
