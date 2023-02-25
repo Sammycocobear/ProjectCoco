@@ -3,12 +3,34 @@
 
 # Abilities
 Fire
+
+>Combustion:
 > CombustionBomb
 
+>Lightning:
+> Railgun
+> Thunder storm
+
 Earth
+>Sand:
 > SandTornado 
 
 > QuickSand
+
+>Lava:
+
+>Metal:
+
+Water
+> RainCloud
+
+>Blood:
+> BloodBlink
+
+>Healing:
+
+>Ice:
+> Hail
 
 # Installation
 Once downloaded, place inside of your **plugins folder** and hope for the best
