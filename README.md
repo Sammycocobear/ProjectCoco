@@ -1,46 +1,39 @@
 # ProjectCoco
-**Sub-Element addon pack for ProjectKorra**
+Sub-Element addon pack for ProjectKorra
 
-# Abilities
-Fire
+## Abilities
+### Fire
+- Combustion
+    - CombustionBomb
+- Lightning
+    - Railgun
+    - ThunderStorm
 
->Combustion:
-> CombustionBomb
+### Earth
+- Sand
+    - SandTornado
+    - QuickSand
+- Lava
+- Metal
 
->Lightning:
-> Railgun
-> Thunder storm
+### Water
+- RainCloud
+- Blood
+    - BloodBlink
+- Healing
+- Ice
+    - Hail
 
-Earth
->Sand:
-> SandTornado 
+## Installation
+1. Download the addon pack.
+2. Place it inside your plugins folder.
+3. Restart your server.
 
-> QuickSand
+## Configuration
+To edit the configuration of abilities, follow these steps:
+1. Go inside the Plugins/ProjectCoco folder.
+2. Edit the config.yml file.
+3. Save the file before restarting your server.
 
->Lava:
-
->Metal:
-
-Water
-> RainCloud
-
->Blood:
-> BloodBlink
-
->Healing:
-
->Ice:
-> Hail
-
-# Installation
-Once downloaded, place inside of your **plugins folder** and hope for the best
-
-# Configuration
-To edit the config of abilities, go inside of the Plugins/ProjectCoco folder and edit the config.yml file. Make sure you save the file before restarting your server.
-
-# Support
-Sammy<3#0001 on discord.
-
-
-
-
+## Support
+If you need support or have any questions, you can contact Sammy<3#0001 on Discord.
