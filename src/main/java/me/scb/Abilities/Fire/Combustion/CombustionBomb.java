@@ -3,7 +3,10 @@ package me.scb.Abilities.Fire.Combustion;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.CombustionAbility;
+import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.util.DamageHandler;
+import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -17,25 +20,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombustionBomb extends CombustionAbility implements AddonAbility {
+
+    private final double gravity = ConfigManager.getConfig().getDouble("Abilities.Combustion.CombustionBomb.Gravity");
+    private final double speed = ConfigManager.getConfig().getDouble("Abilities.Combustion.CombustionBomb.Speed");
+    private final double circleSpeed = ConfigManager.getConfig().getDouble("Abilities.Combustion.CombustionBomb.EndExplosion.IncreaseSpeed");
+    private final double maxCircleRadius = ConfigManager.getConfig().getDouble("Abilities.Combustion.CombustionBomb.EndExplosion.MaxRadius");
+    private final double hitbox = ConfigManager.getConfig().getDouble("Abilities.Combustion.CombustionBomb.Hitbox");
+    private final double damage = ConfigManager.getConfig().getDouble("Abilities.Combustion.CombustionBomb.Damage");
+    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Combustion.CombustionBomb.Cooldown");
+    private final int maxSpheres = ConfigManager.getConfig().getInt("Abilities.Combustion.CombustionBomb.EndExplosion.Spheres");
+    private final double maxHeight = ConfigManager.getConfig().getDouble("Abilities.Combustion.CombustionBomb.MaxHeight");
+    private final int maxBounces = ConfigManager.getConfig().getInt("Abilities.Combustion.CombustionBomb.MaxBounces");
+
     private Location location;
     private Vector direction;
-    //TODO ADD CONFIG
-    private double gravity = .05;
-    private double speed = .25;
     private int bounces = 0;
     private boolean goingDown = true;
     private Location lastBounceLocation;
-    private double maxHeight = 3;
     private boolean burst,clickBurst = false;
-    private int maxBounces = 3;
-    private double circleRadius,circleSpeed = .5,maxCircleRadius = 5;
-    private double hitbox = 1;
-    private int maxSpheres = 6;
+    private double circleRadius;
     private Location[] locations = new Location[maxSpheres];
     private List<Entity> entityList = new ArrayList<>();
-    private double damage = 1;
     public CombustionBomb(Player player) {
         super(player);
+        if (CoreAbility.hasAbility(player,getClass()) || bPlayer.isOnCooldown(this) || !bPlayer.canBend(this)) return;
         location = player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(1));
         direction = getDirection().multiply(speed);
         start();
@@ -72,7 +80,14 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
 
         }
     }
-
+    public boolean allBroken(){
+        for (boolean b : brokenSpheres){
+            if (!b){
+                return false;
+            }
+        }
+        return true;
+    }
     boolean[] brokenSpheres = new boolean[maxSpheres];
 
 
@@ -89,7 +104,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
             makeSphere(location);
             location.subtract(x,0,z);
         }
-        if (circleRadius >= maxCircleRadius){
+        if (circleRadius >= maxCircleRadius || allBroken()){
             explode();
             remove();
             return;
@@ -124,7 +139,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
 
     public void checkLocation(){
         if (!location.getBlock().isPassable() && goingDown) {
-            if (bounces++ == maxBounces || clickBurst){
+            if (++bounces == maxBounces || clickBurst){
                 setBurst(location.getBlock().getRelative(BlockFace.UP).getLocation().add(0.5,1,.5));
                 return;
             }
@@ -158,12 +173,19 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
         for (int i = 0; i < particles; i++) {
             Vector vector = AbilityUtils.getRandomVector().multiply(radius);
             location.add(vector);
-            location.getWorld().spawnParticle(Particle.FLAME,location,1,0,0,0,0);
+            if (i % 5 == 0){
+                location.getWorld().spawnParticle(Particle.SMOKE_NORMAL,location,1,0,0,0,.1);
+            }else if (i % 5 == 1){
+                location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,location,1,0,0,0,.1);
+            }else{
+                location.getWorld().spawnParticle(Particle.FLAME,location,1,0,0,0,.1);
+
+            }
             location.subtract(vector);
         }
     }
 
-    //TODO use for click
+    //TODO use for click might do this
     public void setClickBurst(){
         if (clickBurst) return;
         this.clickBurst = true;
@@ -181,6 +203,12 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
     }
 
     @Override
+    public void remove() {
+        super.remove();
+        bPlayer.addCooldown(this);
+    }
+
+    @Override
     public boolean isSneakAbility() {
         return false;
     }
@@ -192,7 +220,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
 
     @Override
     public long getCooldown() {
-        return 0;
+        return cooldown;
     }
 
     @Override
@@ -217,11 +245,11 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }

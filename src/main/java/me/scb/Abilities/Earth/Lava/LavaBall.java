@@ -18,6 +18,9 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LavaBall extends LavaAbility implements AddonAbility {
     private double radius;
     private final double radiusIncrease = .1;
@@ -33,16 +36,16 @@ public class LavaBall extends LavaAbility implements AddonAbility {
         for (int i = 0; i < particles; i++) {
             Vector vector = AbilityUtils.getRandomVector().multiply(radius);
             location.add(vector);
-            LavaUtils.createLava(location.getBlock());
+            t.add(LavaUtils.createLava(location.getBlock()));
             location.subtract(vector);
         }
 
     }
-
+    List<TempBlock> t = new ArrayList<>();
     public Location getLocation(Location start){
         for (double i = 0; i < 10; /* range */ i+=.5){
             final Block b = start.add(start.getDirection().multiply(i)).getBlock();
-            if (!b.isPassable() && !b.hasMetadata("ProjectCoco://LavaBall://Lava")) {
+            if (!b.isPassable() && !b.hasMetadata("ProjectCoco://LavaAbility://Lava")) {
                 return start;
             }else{
                 start.subtract(start.getDirection().multiply(i));
@@ -55,7 +58,7 @@ public class LavaBall extends LavaAbility implements AddonAbility {
     Location location = null;
     @Override
     public void progress() {
-        if (System.currentTimeMillis() - getStartTime() >= 10000){
+        if (System.currentTimeMillis() - getStartTime() >= 7000){
             remove();
             return;
         }
@@ -65,7 +68,7 @@ public class LavaBall extends LavaAbility implements AddonAbility {
         location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,location,1,0,0,0,0);
         if (!shot && radius < maxRadius) {
             for (Block bl : GeneralMethods.getBlocksAroundPoint(location, 2)) {
-                if (bl.getType() == Material.LAVA && !bl.hasMetadata("ProjectCoco://LavaBall://Lava")) {
+                if (bl.getType() == Material.LAVA && !bl.hasMetadata("ProjectCoco://LavaAbility://Lava")) {
                     radius += radiusIncrease;
                     break;
                 }
@@ -81,6 +84,13 @@ public class LavaBall extends LavaAbility implements AddonAbility {
         }
         if (TempBlock.isTempBlock(location.getBlock())) return;
         makeSphere(location);
+    }
+
+
+    @Override
+    public void remove() {
+        super.remove();
+        t.forEach(TempBlock::revertBlock);
     }
 
     @Override
@@ -121,11 +131,11 @@ public class LavaBall extends LavaAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }

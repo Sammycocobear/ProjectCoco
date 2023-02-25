@@ -2,11 +2,18 @@ package me.scb.Abilities.Fire.Lightning;
 
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
+import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.LightningAbility;
-import de.slikey.effectlib.effect.LineEffect;
+import com.projectkorra.projectkorra.util.DamageHandler;
+import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
+import me.scb.Utils.AbilityUtils;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -14,10 +21,24 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Railgun extends LightningAbility implements AddonAbility {
-    private long minChargeTime = 500;
-    private long maxChargeTime = 2500;
+    private final long minChargeTime = ConfigManager.getConfig().getLong("Abilities.Lightning.Railgun.MinimumChargeTime");
+    private final long maxChargeTime = ConfigManager.getConfig().getLong("Abilities.Lightning.Railgun.MaxChargeTime");
+    private final double hitbox = ConfigManager.getConfig().getLong("Abilities.Lightning.Railgun.Hitbox");
+    private final double damage = ConfigManager.getConfig().getLong("Abilities.Lightning.Railgun.Damage");
+    private final double rangeMultiplier = ConfigManager.getConfig().getLong("Abilities.Lightning.Railgun.RangeMultiplier");
+    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Lightning.Railgun.Cooldown");
+
+
+    private boolean hasShot;
+    private int count = 0;
+    private List<Entity> entityList = new ArrayList<>();
+    private List<ZigZag> zigZags = new ArrayList<>();
+
     public Railgun(Player player) {
         super(player);
+        if (CoreAbility.hasAbility(player,getClass()) || bPlayer.isOnCooldown(this) || !bPlayer.canBend(this)){
+            return;
+        }
         start();
     }
     public boolean canShoot(){
@@ -30,21 +51,25 @@ public class Railgun extends LightningAbility implements AddonAbility {
         long elapsedTime = System.currentTimeMillis() - getStartTime();
         if (elapsedTime <= maxChargeTime){
             chargePercentage = (double) elapsedTime / (double) maxChargeTime;
+        } else {
+            chargePercentage = 1.0;
         }
 
-        String chargeMessage = canShoot() ? String.format(ChatColor.BLUE + "Ready to release... %d%%", (int) (chargePercentage * 100) + 1)
-                : String.format(ChatColor.RED + "Charging... %d%%", (int) (chargePercentage * 100) + 1);
+        String chargeMessage = canShoot() ? String.format(ChatColor.BLUE + "Ready to release... %d%%", (int) (chargePercentage * 100))
+                : String.format(ChatColor.RED + "Charging... %d%%", (int) (chargePercentage * 100));
 
         player.sendActionBar(chargeMessage);
     }
 
+
+
+
     private Location getRandomLocation(){
         return player.getLocation().add(new Vector(ThreadLocalRandom.current().nextDouble(-1,1) * 5,ThreadLocalRandom.current().nextDouble() * 5,ThreadLocalRandom.current().nextDouble(-1,1) * 5));
     }
-    List<ZigZag> zigZags = new ArrayList<>();
 
-    private void zigZag(Location location,double speed) {
-        zigZags.add(new ZigZag(location,player,speed));
+    private void zigZag(Location location) {
+        zigZags.add(new ZigZag(location,player, 0.5));
     }
 
 
@@ -52,57 +77,138 @@ public class Railgun extends LightningAbility implements AddonAbility {
         zigZags.add(new ZigZag(getRandomLocation(),player));
     }
 
+    public Location getGround(Location location) {
+        final Block standingblock = location.getBlock();
+        for (int i = 0; i <= 60; i++) {
+            final Block block = standingblock.getRelative(BlockFace.DOWN, i);
+            if (GeneralMethods.isSolid(block)) {
+                return location.clone().subtract(0,location.getY() - block.getLocation().getY(),0).add(0,1.1,0);
+            }
+        }
+        return null;
+    }
 
-    boolean hasShot = false;
-    int c = 0;
+
+    private void createCircle(Location location){
+        int particleCount = 12;
+        int rand = ThreadLocalRandom.current().nextInt(0,particleCount);
+        for (int i = 0; i < particleCount; i++) {
+            double x = (1 * Math.sin(Math.toRadians(360.0 / particleCount) * i));
+            double z = (1 * Math.cos(Math.toRadians(360.0 / particleCount) * i));
+            Location ground = getGround(location);
+            ground.add(x, 0, z);
+            if (rand == i){
+                player.spawnParticle(Particle.END_ROD,ground,1,.2,.2,.2,.1);
+            }
+            player.spawnParticle(Particle.REDSTONE,ground,1,0,0,0,0,new Particle.DustOptions(Color.fromRGB(1,225,255),1.5f));
+            //ground.subtract(x, 0, z);
+
+        }
+    }
+
+
+
+    public void doDamage(Location location) {
+        for (Entity entity : GeneralMethods.getEntitiesAroundPoint(location, hitbox)) {
+            if (AbilityUtils.isInValidEntity(entity, player) || entityList.contains(entity)) continue;
+            entityList.add(entity);
+            DamageHandler.damageEntity(entity,player,damage,this);
+        }
+
+    }
+
+    public void teleport(){
+        hasShot = true;
+        zigZags.clear();
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+        player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.FLASH, player.getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.END_ROD, player.getLocation(), 3, 0.5, 0.5, 0.5);
+        for (int i = 0; i < 5; i++) {
+            zigZag(player.getLocation().add(player.getLocation().getDirection().multiply(-3)).add(Math.random() * 5, Math.random() * 10, Math.random() * 5));
+        }
+        Location location = player.getLocation();
+        location.setPitch(0);
+        player.teleport(getGround(getTargetedLocation(location,chargePercentage * rangeMultiplier)));
+        player.getWorld().spawnParticle(Particle.SMOKE_LARGE, player.getLocation(), 1);
+        player.getWorld().spawnParticle(Particle.FLASH, player.getLocation(), 2);
+        player.getWorld().spawnParticle(Particle.END_ROD, player.getLocation(), 3, 0.5, 0.5, 0.5);
+
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, .5f, 1.0f);
+    }
+
+
+    public Location getTargetedLocation(Location startLocation, double range) {
+        Location targetLocation = null;
+
+        // Calculate the end location of the target ray
+        Vector direction = startLocation.getDirection();
+        Location endLocation = startLocation.clone().add(direction.clone().multiply(range));
+
+        // Get the last solid block hit by the target ray
+        RayTraceResult result = startLocation.getWorld().rayTraceBlocks(startLocation, direction, range);
+        if (result != null && result.getHitBlock() != null && result.getHitBlock().getType().isSolid()) {
+            // Get the location of the block one block before the hit block
+            targetLocation = result.getHitBlock().getLocation();
+        }
+
+        // If the target block was not found, fall back to the end location of the target ray
+        if (targetLocation == null) {
+            targetLocation = endLocation.getBlock().getLocation();
+        }
+
+        targetLocation.subtract(direction.multiply(1.5));
+        // Set the yaw and pitch of the target location to the same as the start location
+        targetLocation.setYaw(startLocation.getYaw());
+        targetLocation.setPitch(player.getLocation().getPitch());
+
+        return targetLocation.add(0.5, 0.5, 0.5);
+    }
+
+
+
+
+
     @Override
     public void progress() {
-        if (System.currentTimeMillis() - getStartTime() >= maxChargeTime + 2000){
-            remove();
-            return;
-        }
-        if (player.isSneaking() && !hasShot){
+        if (player.isSneaking() && !hasShot) {
             updateChargeDisplay(player);
-            if (c++ == 8) {
+            if (count++ == 6) {
                 for (int i = 0; i < (int) (Math.random() * 3) + 1; i++) {
                     zigZag();
                 }
-                player.sendMessage("made");
-                c = 0;
+                count = 0;
             }
-        }else if (canShoot() && !hasShot) {
-            hasShot = true;
-            zigZags.clear();
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
-            player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, player.getLocation(), 1);
-            player.getWorld().spawnParticle(Particle.SPELL_INSTANT, player.getLocation(), 50, 0.5, 0.5, 0.5);
-            double chargePercentage = (double)(System.currentTimeMillis() - getStartTime()) / (double)(maxChargeTime);
-            for (int i = 0; i < 5; i++) {
-                zigZag(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(-3)).add(Math.random() *  5,Math.random() *  10,Math.random() *  5),  .5);
+            if (canShoot()){
+                Location location = player.getLocation();
+                location.setPitch(0);
+                createCircle(getTargetedLocation(location,chargePercentage * rangeMultiplier));
             }
-            Location location = player.getEyeLocation();
-            location.setPitch(-1);
-            Vector direction = location.getDirection();
-            direction.multiply(chargePercentage * 15.0);
-            player.setVelocity(direction);
-            player.getWorld().spawnParticle(Particle.SMOKE_LARGE, player.getLocation(), 1);
-            player.getWorld().spawnParticle(Particle.CRIT_MAGIC, player.getLocation(), 5);
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1.0f, 1.0f);
-        }else if (zigZags.isEmpty()){
+        } else if (canShoot() && !hasShot) {
+            teleport();
+        } else if (zigZags.isEmpty()) {
             remove();
             return;
         }
-        if (hasShot && c++ == 15){
-            zigZag(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(-3)).add(Math.random() *  5,Math.random() *  10,Math.random() *  5),  .5);
-            c = 0;
+
+        if (hasShot) {
+            if (count++==6) {
+                zigZag(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(-3)).add(Math.random() * 5, Math.random() * 10, Math.random() * 5));
+                count = 0;
+            }
+            doDamage(zigZags.get(0).getLocation());
+
         }
         zigZags.removeIf(ZigZag::zigZag);
 
 
-
-
     }
 
+    @Override
+    public void remove() {
+        super.remove();
+        bPlayer.addCooldown(this,cooldown);
+    }
 
     @Override
     public boolean isSneakAbility() {
@@ -116,7 +222,7 @@ public class Railgun extends LightningAbility implements AddonAbility {
 
     @Override
     public long getCooldown() {
-        return 0;
+        return cooldown;
     }
 
     @Override
@@ -126,7 +232,7 @@ public class Railgun extends LightningAbility implements AddonAbility {
 
     @Override
     public Location getLocation() {
-        return null;
+        return player.getLocation();
     }
 
     @Override
@@ -141,11 +247,11 @@ public class Railgun extends LightningAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }

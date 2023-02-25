@@ -8,14 +8,13 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 public class LavaUtils {
-    private final static MetadataValue value = new FixedMetadataValue(ProjectCoco.getPlugin(),1);
     public static TempBlock createLava(Block block){
-        block.setMetadata("ProjectCoco://LavaAbility://Lava",value);
+        block.setMetadata("ProjectCoco://LavaAbility://Lava",AbilityUtils.getValue());
         return new TempBlock(block, Material.LAVA);
     }
 
     public static TempBlock createMagma(Block block){
-        block.setMetadata("ProjectCoco://LavaAbility://Magma",value);
+        block.setMetadata("ProjectCoco://LavaAbility://Magma",AbilityUtils.getValue());
         return new TempBlock(block, Material.MAGMA_BLOCK);
     }
 }

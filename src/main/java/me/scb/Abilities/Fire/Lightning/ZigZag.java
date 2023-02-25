@@ -8,14 +8,25 @@ import org.bukkit.util.Vector;
 
 public class ZigZag {
     private Location location;
+    private Location target;
+
     private Player player;
     private double speed;
     private double increment;
+
     public ZigZag(Location location, Player player) {
         this.location = location;
         this.player = player;
         this.speed = .2;
         increment = .1;
+        zigZag();
+    }
+
+    public ZigZag(Location location, Location target) {
+        this.location = location;
+        this.speed = .2;
+        increment = .1;
+        this.target = target;
         zigZag();
     }
 
@@ -36,12 +47,12 @@ public class ZigZag {
     }
 
     public boolean zigZag() {
-        Vector direction = GeneralMethods.getDirection(location, player.getEyeLocation()).multiply(speed);
+        Vector direction = GeneralMethods.getDirection(location, player == null ? target : player.getEyeLocation()).multiply(speed);
         Vector ortho = GeneralMethods.getOrthogonalVector(direction, Math.random() * 360, 0.5 + Math.random() * 0.5);
         Vector out = direction.clone().add(ortho).multiply(increment);
         Vector in = direction.clone().subtract(ortho).multiply(increment);
         double distance = speed / Math.cos(direction.angle(out));
-        if (location.distanceSquared(player.getEyeLocation()) < 1){
+        if (location.distanceSquared(player == null ? target : player.getEyeLocation()) < 1){
             return true;
         }
         for (double d = 0; d < distance; d += increment) {
@@ -54,6 +65,10 @@ public class ZigZag {
         }
         return false;
 
+    }
+
+    public Location getLocation(){
+        return location;
     }
 
 }

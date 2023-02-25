@@ -48,7 +48,7 @@ public class Erupt extends LavaAbility implements AddonAbility {
     }
 
     public void erupt(){
-        for (Block b : GeneralMethods.getBlocksAroundPoint(sourceLocation.clone().add(0,height,0),radius)){
+        for (Block b : GeneralMethods.getBlocksAroundPoint(sourceLocation.clone().add(0,height,0),radius - 1)){
             if (!isEarthbendable(b) && !isAir(b.getType()))continue;
             tempBlockList.add(LavaUtils.createLava(b));
         }
@@ -122,11 +122,11 @@ public class Erupt extends LavaAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }

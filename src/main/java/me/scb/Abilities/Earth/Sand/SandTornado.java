@@ -19,15 +19,15 @@ import org.bukkit.util.Vector;
 
 
 public class SandTornado extends SandAbility implements AddonAbility {
-    private final long cooldown = ProjectCoco.getPlugin().getConfig().getLong(AbilityUtils.getConfigPatch(this,"Cooldown"));
-    private final double range = ConfigManager.getConfig().getDouble(AbilityUtils.getConfigPatch(this,"Range"));
-    private final double shootSpeed = ConfigManager.getConfig().getDouble(AbilityUtils.getConfigPatch(this,"ShootSpeed"));
-    private final double backSpeed = ConfigManager.getConfig().getDouble(AbilityUtils.getConfigPatch(this,"RecallSpeed"));
-    private final double rideHeight = ConfigManager.getConfig().getDouble(AbilityUtils.getConfigPatch(this,"RideHeight"));
-    private final double seatingSpeed = ConfigManager.getConfig().getDouble(AbilityUtils.getConfigPatch(this,"SeatingSpeed"));
-    private final double rideSpeed = ConfigManager.getConfig().getDouble(AbilityUtils.getConfigPatch(this,"RideSpeed"));
-    private final long breakTime = ConfigManager.getConfig().getLong(AbilityUtils.getConfigPatch(this,"BreakTime"));
-    private final int sourceRange = ConfigManager.getConfig().getInt(AbilityUtils.getConfigPatch(this,"SourceRange"));
+    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Sand.SandTornado.Cooldown");
+    private final double range = ConfigManager.getConfig().getDouble("Abilities.Sand.SandTornado.Range");
+    private final double shootSpeed = ConfigManager.getConfig().getDouble("Abilities.Sand.SandTornado.ShootSpeed");
+    private final double backSpeed = ConfigManager.getConfig().getDouble("Abilities.Sand.SandTornado.RecallSpeed");
+    private final double rideHeight = ConfigManager.getConfig().getDouble("Abilities.Sand.SandTornado.RideHeight");
+    private final double seatingSpeed = ConfigManager.getConfig().getDouble("Abilities.Sand.SandTornado.SeatingSpeed");
+    private final double rideSpeed = ConfigManager.getConfig().getDouble("Abilities.Sand.SandTornado.RideSpeed");
+    private final long breakTime = ConfigManager.getConfig().getLong("Abilities.Sand.SandTornado.BreakTime");
+    private final int sourceRange = ConfigManager.getConfig().getInt("Abilities.Sand.SandTornado.SourceRange");
 
     private boolean isRide,isSeated;
     private boolean hasShot;

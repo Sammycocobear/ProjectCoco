@@ -1,24 +1,33 @@
 package me.scb;
 
-import com.projectkorra.projectkorra.ProjectKorra;
+import com.projectkorra.projectkorra.Element;
 import com.projectkorra.projectkorra.ability.CoreAbility;
-import de.slikey.effectlib.EffectManager;
 import me.scb.Configuration.ConfigManager;
 import me.scb.Listener.AbilityListener;
 import me.scb.Listener.DamageHandlerListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
 public final class ProjectCoco extends JavaPlugin {
     private static ProjectCoco plugin;
-    private static EffectManager effectManager;
+    private static final String author = "bbakaa";
+    private static final String version = "1.0.0";
+
+    public static boolean hasSound(){
+        Element.SubElement[] subElements = Element.SubElement.getAddonSubElements();
+        for (int i = 0; i < subElements.length; i++) {
+            Element.SubElement e = subElements[i];
+            if (e.getName().equalsIgnoreCase("sound")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     @Override
     public void onEnable() {
         plugin = this;
-        effectManager = new EffectManager(ProjectCoco.getPlugin());
         new ConfigManager();
         CoreAbility.registerPluginAbilities(this,"me.scb.Abilities");
         getPlugin().getServer().getPluginManager().registerEvents(new AbilityListener(),plugin);
@@ -28,15 +37,19 @@ public final class ProjectCoco extends JavaPlugin {
     public static ProjectCoco getPlugin(){
         return plugin;
     }
-    public static EffectManager getEffectManager(){
-        return effectManager;
-    }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
 
+    public static final String getAuthor(){
+        return author;
+    }
+
+    public static final String getVersion(){
+        return version;
+    }
 
 
 
