@@ -7,7 +7,7 @@ Sub-Element addon pack for ProjectKorra
     - CombustionBomb
 - Lightning
     - Railgun
-    - ThunderStorm
+    - ThunderStorm **(combo)**
 
 ### Earth
 - Sand
@@ -25,11 +25,13 @@ Sub-Element addon pack for ProjectKorra
 - Healing
 - Ice
     - Hail
+- Healing
+    - RefreshingRain
     
 ### Air
 - Sound
-   - SoundBarrier (passive)
--Spiritual
+   - SoundBarrier **(passive)**
+- Spiritual
    - SummonSpirits
 
 
