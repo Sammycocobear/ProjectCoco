@@ -7,12 +7,16 @@ import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.LightningAbility;
 import com.projectkorra.projectkorra.ability.util.ComboManager;
 import com.projectkorra.projectkorra.util.ClickType;
+import com.projectkorra.projectkorra.util.DamageHandler;
 import de.slikey.effectlib.util.RandomUtils;
 import me.scb.Abilities.Water.RainCloud;
 import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -28,7 +32,7 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
 
 
     private Location location;
-    private List<ZigZag> thunderStrikes = new ArrayList<>();
+    private final List<ZigZag> thunderStrikes = new ArrayList<>();
     private int ticks;
     public ThunderStorm(Player player) {
         super(player);
@@ -37,6 +41,7 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
         int search = 0;
         while (!location.subtract(0,1,0).getBlock().isSolid() && search++ < 50);
         location.add(0,height + 1,0);
+        location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE,1.5f,.6f);
 
         start();
     }
@@ -50,12 +55,23 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
         }
     }
 
+
+    public void doDamage(Location location) {
+        for (Entity entity : GeneralMethods.getEntitiesAroundPoint(location, 1)) {
+            if (AbilityUtils.isInValidEntity(entity, player) /*|| entityList.contains(entity)*/) continue;
+            DamageHandler.damageEntity(entity,player,2,this);
+        }
+
+    }
+
     public void makeThunderVisuals(){
-        for (int i = 1; i < (int) (Math.random() * 3); i++){
-            Location cloneLocation, floorLocation = location.clone().subtract(0,height + 1,0);
+        location.getWorld().spawnParticle(Particle.FLASH,location,1,.5,.5,.5,0);
+        for (int i = 0; i < (int) (Math.random() * 5); i++){
+            Location cloneLocation, floorLocation;
+            cloneLocation = location.clone().add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius - 1));
+            floorLocation = cloneLocation.clone().subtract(0,height + 1, 0);
             floorLocation.setPitch(90);
-            cloneLocation = location.clone().add(Math.random() * radius - 1,0, Math.random() * radius - 1);
-            thunderStrikes.add(new ZigZag(cloneLocation,floorLocation));
+            thunderStrikes.add(new ZigZag(cloneLocation,floorLocation, player));
         }
     }
 
@@ -66,11 +82,17 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
             return;
         }
 
-        if (ticks++ % 20 == 0){
+        if (ticks++ % 4 == 0){
             makeThunderVisuals();
-            player.sendMessage(ticks +"");
         }
-
+        for (int i = 0; i < thunderStrikes.size(); i++) {
+            ZigZag zigZag = thunderStrikes.get(i);
+            if (zigZag.zigZag()){
+                thunderStrikes.remove(i--);
+            }
+            doDamage(zigZag.getLocation());
+        }
+        thunderStrikes.removeIf(ZigZag::zigZag);
         makeCloud();
     }
 
@@ -117,12 +139,12 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 
 

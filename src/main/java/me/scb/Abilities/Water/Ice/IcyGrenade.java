@@ -7,6 +7,7 @@ import com.projectkorra.projectkorra.util.ClickType;
 import com.projectkorra.projectkorra.util.TempBlock;
 import com.projectkorra.projectkorra.waterbending.WaterManipulation;
 import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import me.scb.Utils.WaterUtils;
 import org.bukkit.Location;
@@ -102,11 +103,11 @@ public class IcyGrenade extends IceAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }

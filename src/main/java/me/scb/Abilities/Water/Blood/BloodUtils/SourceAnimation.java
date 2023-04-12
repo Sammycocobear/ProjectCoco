@@ -1,5 +1,6 @@
-package me.scb.Abilities.Water.Blood;
+package me.scb.Abilities.Water.Blood.BloodUtils;
 
+import me.scb.Utils.RainbowColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -12,6 +13,7 @@ public class SourceAnimation {
     private final LivingEntity sourceEntity;
     private double progress;
     private final double speed;
+    private int index = 0;
 
     public SourceAnimation(LivingEntity entity, Player player) {
         this.sourceEntity = entity;
@@ -38,7 +40,10 @@ public class SourceAnimation {
             }
             Vector offset = direction.clone().multiply(i);
             Location spawnLocation = sourceLocation.clone().add(offset);
-            spawnLocation.getWorld().spawnParticle(Particle.REDSTONE, spawnLocation, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.RED, 1));
+            if (RainbowColor.playParticles(player,spawnLocation,index)) {
+                spawnLocation.getWorld().spawnParticle(Particle.REDSTONE, spawnLocation, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.RED, 2));
+            }
+            index++;
         }
 
         return progress >= distance;

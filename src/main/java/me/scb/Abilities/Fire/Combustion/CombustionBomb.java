@@ -8,6 +8,7 @@ import com.projectkorra.projectkorra.util.DamageHandler;
 import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
+import me.scb.Utils.RainbowColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -41,6 +42,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
     private double circleRadius;
     private Location[] locations = new Location[maxSpheres];
     private List<Entity> entityList = new ArrayList<>();
+    private int index = 0;
     public CombustionBomb(Player player) {
         super(player);
         if (CoreAbility.hasAbility(player,getClass()) || bPlayer.isOnCooldown(this) || !bPlayer.canBend(this)) return;
@@ -51,6 +53,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
 
     @Override
     public void progress() {
+        index++;
         if (!burst) {
             checkLocation();
             bounce();
@@ -169,7 +172,6 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
     public void makeSphere(Location location){
         int particles = 10;
         double radius = .5;
-
         for (int i = 0; i < particles; i++) {
             Vector vector = AbilityUtils.getRandomVector().multiply(radius);
             location.add(vector);
@@ -178,8 +180,9 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
             }else if (i % 5 == 1){
                 location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,location,1,0,0,0,.1);
             }else{
-                location.getWorld().spawnParticle(Particle.FLAME,location,1,0,0,0,.1);
-
+                if (RainbowColor.playParticles(player,location,index)) {
+                    location.getWorld().spawnParticle(Particle.FLAME, location, 1, 0, 0, 0, .1);
+                }
             }
             location.subtract(vector);
         }

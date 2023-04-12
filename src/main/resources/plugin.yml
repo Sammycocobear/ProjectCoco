@@ -2,6 +2,6 @@ name: ProjectCoco
 version: '${project.version}'
 main: me.scb.ProjectCoco
 api-version: 1.17
-depend: [ ProjectKorra ]
+depend: [ ProjectKorra, ProtocolLib]
 softdepend:
   - ProjectAddons

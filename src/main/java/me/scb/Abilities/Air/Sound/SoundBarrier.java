@@ -1,11 +1,18 @@
 package me.scb.Abilities.Air.Sound;
 
+import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.PassiveAbility;
+import com.projectkorra.projectkorra.util.DamageHandler;
 import me.scb.Abilities.Air.Sound.SoundElement.SoundAbility;
+import me.scb.ProjectCoco;
+import me.scb.Utils.AbilityUtils;
+import me.scb.Utils.RainbowColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -22,6 +29,8 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
         super(player);
     }
     double angle;
+    private int index = 0;
+
     @Override
     public void progress() {
 
@@ -67,8 +76,16 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
                 vector.multiply(.08);
                 playerLoc.add(vector);
                 angle += .08;
-                player.getLocation().getWorld().spawnParticle(Particle.CLOUD, playerLoc, 1, 0, 0, 0, 0);
+                if (RainbowColor.playParticles(player,playerLoc,index)) {
+                    player.getLocation().getWorld().spawnParticle(Particle.CLOUD, playerLoc, 1, 0, 0, 0, 0);
+                }
                 playerLoc.subtract(vector);
+            }
+            index++;
+            for (Entity entity : GeneralMethods.getEntitiesAroundPoint(player.getLocation().add(0,.5,0),2)){
+                if (AbilityUtils.isInValidEntity(entity,player)) continue;
+                DamageHandler.damageEntity(entity,player,1,this);
+                player.setWalkSpeed(.2f);
             }
         }
 
@@ -121,12 +138,12 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 
     @Override

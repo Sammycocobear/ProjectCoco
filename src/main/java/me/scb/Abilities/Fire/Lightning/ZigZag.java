@@ -2,9 +2,12 @@ package me.scb.Abilities.Fire.Lightning;
 
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.LightningAbility;
+import me.scb.Utils.RainbowColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import java.util.Set;
 
 public class ZigZag {
     private Location location;
@@ -13,7 +16,7 @@ public class ZigZag {
     private Player player;
     private double speed;
     private double increment;
-
+    private int iterations = 0;
     public ZigZag(Location location, Player player) {
         this.location = location;
         this.player = player;
@@ -22,11 +25,12 @@ public class ZigZag {
         zigZag();
     }
 
-    public ZigZag(Location location, Location target) {
+    public ZigZag(Location location, Location target, Player player) {
         this.location = location;
         this.speed = .2;
         increment = .1;
         this.target = target;
+        this.player = player;
         zigZag();
     }
 
@@ -47,21 +51,26 @@ public class ZigZag {
     }
 
     public boolean zigZag() {
-        Vector direction = GeneralMethods.getDirection(location, player == null ? target : player.getEyeLocation()).multiply(speed);
+        Vector direction = GeneralMethods.getDirection(location, target == null ? player.getEyeLocation() : target).multiply(speed);
         Vector ortho = GeneralMethods.getOrthogonalVector(direction, Math.random() * 360, 0.5 + Math.random() * 0.5);
         Vector out = direction.clone().add(ortho).multiply(increment);
         Vector in = direction.clone().subtract(ortho).multiply(increment);
         double distance = speed / Math.cos(direction.angle(out));
-        if (location.distanceSquared(player == null ? target : player.getEyeLocation()) < 1){
+        if (location.distanceSquared(target == null ? player.getEyeLocation() : target) < 1){
             return true;
         }
         for (double d = 0; d < distance; d += increment) {
             location.add(out);
-            LightningAbility.playLightningbendingParticle(location, 0, 0, 0);
+            if (RainbowColor.playParticles(player, location,iterations++)) {
+                LightningAbility.playLightningbendingParticle(location, 0, 0, 0);
+            }
         }
+
         for (double d = 0; d < distance; d += increment) {
             location.add(in);
-            LightningAbility.playLightningbendingParticle(location, 0, 0, 0);
+            if (RainbowColor.playParticles(player, location,iterations++)) {
+                LightningAbility.playLightningbendingParticle(location, 0, 0, 0);
+            }
         }
         return false;
 

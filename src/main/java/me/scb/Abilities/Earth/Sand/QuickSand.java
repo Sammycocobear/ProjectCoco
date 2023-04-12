@@ -7,6 +7,7 @@ import com.projectkorra.projectkorra.util.TempBlock;
 import com.projectkorra.projectkorra.waterbending.ice.PhaseChange;
 import me.scb.Configuration.Config;
 import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import me.scb.Utils.TempFallingBlock;
 import org.bukkit.Bukkit;
@@ -95,7 +96,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
                 }
             }
             for (Entity entity : GeneralMethods.getEntitiesAroundPoint(fb.getLocation(),.5)){
-                if (AbilityUtils.isInValidEntity(entity) || !entity.getLocation().subtract(0,.1,0).getBlock().isSolid()) continue;
+                if (AbilityUtils.isInValidEntity(entity) || !entity.getLocation().subtract(0,.1,0).getBlock().getType().isSolid()) continue;
                 entity.setVelocity(entity.getVelocity().multiply(.5));
             }
             fb.getWorld().spawnParticle(Particle.BLOCK_DUST,fb.getLocation(),1,.5,.5,.5,0,Material.END_STONE.createBlockData());
@@ -168,11 +169,11 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }

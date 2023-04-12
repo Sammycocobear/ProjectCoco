@@ -254,14 +254,13 @@ public class SandTornado extends SandAbility implements AddonAbility {
     public void stop() {
 
     }
-
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }

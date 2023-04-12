@@ -2,30 +2,41 @@ package me.scb.Listener;
 
 import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.CoreAbility;
-import me.scb.Abilities.Earth.Lava.Erupt;
-import me.scb.Abilities.Earth.Lava.LavaBall;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import me.scb.Abilities.Air.Spiritual.SummonSpirits;
+import me.scb.Abilities.Earth.Sand.SandPad;
+import me.scb.Abilities.Fire.BlueFire.BlueFireOrbs;
+import me.scb.Abilities.Fire.Lightning.Test;
+import me.scb.Abilities.Earth.Lava.Volcano;
 import me.scb.Abilities.Earth.Sand.QuickSand;
 import me.scb.Abilities.Earth.Sand.SandTornado;
 import me.scb.Abilities.Fire.Combustion.CombustionBomb;
 import me.scb.Abilities.Fire.Lightning.Railgun;
 import me.scb.Abilities.Fire.Lightning.ThunderStorm;
 import me.scb.Abilities.Water.Blood.BloodBlink;
-import me.scb.Abilities.Water.Blood.BloodRush;
+import me.scb.Abilities.Water.Blood.BloodPool;
+import me.scb.Abilities.Water.Healing.RefreshingRain;
 import me.scb.Abilities.Water.Ice.Hail;
 import me.scb.Abilities.Water.Ice.IcyGrenade;
 import me.scb.Abilities.Water.RainCloud;
 import me.scb.Utils.FallDamageRemoval;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+
+import java.util.Vector;
 
 public class AbilityListener implements Listener {
     @EventHandler
@@ -43,16 +54,19 @@ public class AbilityListener implements Listener {
             }else{
                 new SandTornado(player);
             }
-        }else if (bound.equalsIgnoreCase("LavaBall")){
-            new LavaBall(player);
-        }else if (bound.equalsIgnoreCase("Railgun")){
+        } else if (bound.equalsIgnoreCase("Railgun")){
             new Railgun(player);
-        }else if (bound.equalsIgnoreCase("BloodRush")){
-            new BloodRush(player);
-        }else if (bound.equalsIgnoreCase("IcyGrenade")){
+        } else if (bound.equalsIgnoreCase("IcyGrenade")){
             new IcyGrenade(player);
+        } else if (bound.equalsIgnoreCase("BloodPool")){
+            new BloodPool(player);
+        } else if (bound.equalsIgnoreCase("RefreshingRain")){
+            new RefreshingRain(player);
+        } else if (bound.equalsIgnoreCase("SummonSpirits")){
+            new SummonSpirits(player);
         }
     }
+
 
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
@@ -70,8 +84,6 @@ public class AbilityListener implements Listener {
             new QuickSand(player);
         } else if (bound.equalsIgnoreCase("CombustionBomb")) {
             new CombustionBomb(player);
-        } else if (bound.equalsIgnoreCase("Erupt")) {
-            new Erupt(player);
         } else if (bound.equalsIgnoreCase("IcyGrenade")) {
             final IcyGrenade icyGrenade = CoreAbility.getAbility(player, IcyGrenade.class);
             if (icyGrenade != null) {
@@ -91,6 +103,24 @@ public class AbilityListener implements Listener {
             new Hail(player);
         } else if (bound.equalsIgnoreCase("ThunderStorm")) {
             new ThunderStorm(player);
+        } else if (bound.equalsIgnoreCase("Volcano")) {
+            new Volcano(player);
+        } else if (bound.equalsIgnoreCase("BlueFireOrbs")) {
+            BlueFireOrbs blueFireOrbs = CoreAbility.getAbility(player,BlueFireOrbs.class);
+            if (blueFireOrbs == null){
+                new BlueFireOrbs(player);
+            }else{
+                blueFireOrbs.setShoot();
+            }
+        }else if (bound.equalsIgnoreCase("SandPad")){
+            new SandPad(player);
+        }else if (bound.equalsIgnoreCase("Test")){
+            new Test(player);
+        } else if (bound.equalsIgnoreCase("BloodPool")) {
+            BloodPool bloodPool = CoreAbility.getAbility(player,BloodPool.class);
+            if (bloodPool != null){
+                bloodPool.selectPool();
+            }
         }
     }
 
@@ -118,4 +148,8 @@ public class AbilityListener implements Listener {
             e.setCancelled(true);
         }
     }
+
+
+
+
 }

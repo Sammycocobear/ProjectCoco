@@ -5,6 +5,7 @@ import com.projectkorra.projectkorra.ability.CoreAbility;
 import me.scb.Configuration.ConfigManager;
 import me.scb.Listener.AbilityListener;
 import me.scb.Listener.DamageHandlerListener;
+import me.scb.Listener.EasterEggListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ProjectCoco extends JavaPlugin {
@@ -32,6 +33,9 @@ public final class ProjectCoco extends JavaPlugin {
         CoreAbility.registerPluginAbilities(this,"me.scb.Abilities");
         getPlugin().getServer().getPluginManager().registerEvents(new AbilityListener(),plugin);
         getPlugin().getServer().getPluginManager().registerEvents(new DamageHandlerListener(),plugin);
+        getPlugin().getServer().getPluginManager().registerEvents(new EasterEggListener(),plugin);
+
+
 
     }
     public static ProjectCoco getPlugin(){
