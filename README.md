@@ -13,6 +13,7 @@ Sub-Element addon pack for ProjectKorra
 - Sand
     - SandTornado
     - QuickSand
+    - SandPad
 - Lava
 - Metal
 
@@ -20,9 +21,17 @@ Sub-Element addon pack for ProjectKorra
 - RainCloud
 - Blood
     - BloodBlink
+    - BloodPool
 - Healing
 - Ice
     - Hail
+    
+### Air
+- Sound
+   - SoundBarrier (passive)
+-Spiritual
+   - SummonSpirits
+
 
 ## Installation
 1. Download the addon pack.
