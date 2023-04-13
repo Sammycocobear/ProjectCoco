@@ -23,10 +23,9 @@ Sub-Element addon pack for ProjectKorra
     - BloodBlink
     - BloodPool
 - Healing
+    - RefreshingRain
 - Ice
     - Hail
-- Healing
-    - RefreshingRain
     
 ### Air
 - Sound
