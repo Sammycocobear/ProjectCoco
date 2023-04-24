@@ -25,7 +25,9 @@ Sub-Element addon pack for ProjectKorra
 - Healing
     - RefreshingRain
 - Ice
-    - Hail
+    - Hail **(combo)**
+- Plant
+    - SeedSummoner **(multiability)**
     
 ### Air
 - Sound
