@@ -171,6 +171,13 @@ public class Railgun extends LightningAbility implements AddonAbility {
 
     @Override
     public void progress() {
+        if (player.isDead() || !player.isOnline()) {
+            remove();
+            return;
+        }else if (GeneralMethods.isRegionProtectedFromBuild(player,player.getLocation())){
+            remove();
+            return;
+        }
         if (player.isSneaking() && !hasShot) {
             updateChargeDisplay(player);
             if (count++ == 6) {
@@ -253,5 +260,13 @@ public class Railgun extends LightningAbility implements AddonAbility {
     @Override
     public String getVersion() {
         return ProjectCoco.getVersion();
+    }
+
+    public String getInstructions(){
+        return "Hold sneak and then release to teleport.";
+    }
+
+    public String getDescription(){
+        return "While sneaking, charge your Railgun, and upon releasing the sneak button, you will teleport to a location in front of you. The distance of the teleportation will depend on the duration of the charge. The teleportation will damage any entities located between your starting position and the teleported location.";
     }
 }

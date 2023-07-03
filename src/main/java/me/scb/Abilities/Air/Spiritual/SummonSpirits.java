@@ -6,14 +6,17 @@ import com.destroystokyo.paper.entity.ai.GoalType;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.SpiritualAbility;
+import com.projectkorra.projectkorra.airbending.AirBurst;
 import com.projectkorra.projectkorra.util.DamageHandler;
 import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import me.scb.Utils.FallDamageRemoval;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -24,13 +27,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class SummonSpirits extends SpiritualAbility implements AddonAbility {
-    private Map<Vex,Vector> vexes = new HashMap<>();
+    private Map<Vex, Vector> vexes = new HashMap<>();
     private int maxVexes = Math.max(6,2);
     private double speed = 5/100.0;
     private double range = 15;
     private Location endLocation,origin;
     private double spaceBetween = 2;
     private List<Entity> entityList = new ArrayList<>();
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
     public void createVexes(){
         MetadataValue value = new FixedMetadataValue(ProjectCoco.getPlugin(),1);
@@ -47,11 +55,10 @@ public class SummonSpirits extends SpiritualAbility implements AddonAbility {
             vex.setInvulnerable(true);
             vex.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed);
             Bukkit.getMobGoals().removeAllGoals(vex);
-            vex.getPathfinder().moveTo(vex.getLocation().add(GeneralMethods.getDirection(vex.getLocation(),endLocation)));
             vex.clearLootTable();
             vex.setMetadata("ProjectCoco://SummonSpirit://Vex",value);
             vex.setCustomName(ChatColor.of("#967bb6") + "Spirit");
-            vexes.put(vex,GeneralMethods.getDirection(spawnLocation,endLocation).multiply(speed));
+            vexes.put(vex,GeneralMethods.getDirection(vex.getLocation(),endLocation).normalize().multiply(.5));
         }
     }
 
@@ -74,6 +81,8 @@ public class SummonSpirits extends SpiritualAbility implements AddonAbility {
     }
 
 
+
+
     @Override
     public void progress() {
         for (Vex vex : vexes.keySet()){
@@ -81,7 +90,9 @@ public class SummonSpirits extends SpiritualAbility implements AddonAbility {
                 remove();
                 return;
             }
+
             vex.setVelocity(vexes.get(vex));
+
             vex.lookAt(endLocation);
             doDamage(vex.getLocation());
         }
@@ -131,11 +142,11 @@ public class SummonSpirits extends SpiritualAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
-    @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
+
 }

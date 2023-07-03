@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import me.scb.ProjectCoco;
 
 public class SandPad extends SandAbility implements AddonAbility {
     private final int radius = ConfigManager.getConfig().getInt("Abilities.Sand.SandPad.Radius");
@@ -127,9 +128,8 @@ public class SandPad extends SandAbility implements AddonAbility {
 
         if (System.currentTimeMillis() >= del){
             del = System.currentTimeMillis() + duration/10;
-            sandstoneList.forEach(s -> createBlockBreakAnimation(s.getBlock(), player, progress));
+            sandstoneList.forEach(s -> Bukkit.getOnlinePlayers().forEach(p -> createBlockBreakAnimation(s.getBlock(), p, progress)));
             progress++;
-            System.out.println(progress);
         }
 
 
@@ -154,7 +154,14 @@ public class SandPad extends SandAbility implements AddonAbility {
     @Override
     public void remove() {
         super.remove();
-        player.sendMessage("removed");
+    }
+
+    public String getInstructions(){
+        return "Click while standing on-top of a sand-bendable block.";
+    }
+
+    public String getDescription(){
+        return "While sneaking on a sand block, the SandPad ability will be activated, propelling you upwards into the air. After a certain duration, the pad will break, causing anyone standing on it to fall down.";
     }
 
     @Override
@@ -194,11 +201,11 @@ public class SandPad extends SandAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
-    @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
+
 }

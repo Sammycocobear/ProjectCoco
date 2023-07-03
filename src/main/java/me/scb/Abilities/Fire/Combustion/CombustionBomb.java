@@ -1,5 +1,6 @@
 package me.scb.Abilities.Fire.Combustion;
 
+import com.projectkorra.projectkorra.Element;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.CombustionAbility;
@@ -53,6 +54,13 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
 
     @Override
     public void progress() {
+        if (player.isDead() || !player.isOnline()) {
+            remove();
+            return;
+        }else if (GeneralMethods.isRegionProtectedFromBuild(player,player.getLocation())){
+            remove();
+            return;
+        }
         index++;
         if (!burst) {
             checkLocation();
@@ -146,6 +154,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
                 setBurst(location.getBlock().getRelative(BlockFace.UP).getLocation().add(0.5,1,.5));
                 return;
             }
+            player.getWorld().playSound(location, Sound.BLOCK_SHROOMLIGHT_PLACE,.5f,1f);
             goingDown = false;
             location = location.getBlock().getRelative(BlockFace.UP).getLocation().add(0.5, .5, .5);
             lastBounceLocation = location.clone();
@@ -181,7 +190,11 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
                 location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,location,1,0,0,0,.1);
             }else{
                 if (RainbowColor.playParticles(player,location,index)) {
-                    location.getWorld().spawnParticle(Particle.FLAME, location, 1, 0, 0, 0, .1);
+                    if (bPlayer.hasSubElement(Element.BLUE_FIRE)){
+                        location.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, location, 1, 0, 0, 0, .1);
+                    }else{
+                        location.getWorld().spawnParticle(Particle.FLAME, location, 1, 0, 0, 0, .1);
+                    }
                 }
             }
             location.subtract(vector);
@@ -197,6 +210,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
     public void setBurst(Location location){
         if (burst) return;
         burst = true;
+        player.getWorld().playSound(location, Sound.BLOCK_SHROOMLIGHT_PLACE,1.5f,1f);
         this.location = location.clone();
     }
 
@@ -209,6 +223,14 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
     public void remove() {
         super.remove();
         bPlayer.addCooldown(this);
+    }
+
+    public String getInstructions(){
+        return "Click to summon a CombustionBomb";
+    }
+
+    public String getDescription(){
+        return "his ability conjures a menacing thunderstorm overhead. As dark clouds gather, occasional lightning strikes cause damage to entities caught within its reach, delivering a shocking impact.";
     }
 
     @Override

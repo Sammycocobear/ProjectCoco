@@ -7,8 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.Set;
-
 public class ZigZag {
     private Location location;
     private Location target;

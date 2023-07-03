@@ -163,6 +163,15 @@ public class SandTornado extends SandAbility implements AddonAbility {
     }
 
 
+
+    public String getInstructions(){
+        return "Sneak on a sand-bendable block to source and then left click to summon the tornado. Once the tornado is summoned you can sneak to ride it or click to shoot it. If you click you can sneak to redirect it.";
+    }
+
+    public String getDescription(){
+        return "Sneak on a sand-bendable block to mark it as the source, then left-click to summon a sand tornado. Once the tornado is summoned, you can sneak to ride it or left-click to shoot it. If the shot tornado captures an entity, it will pull them towards you. However, the entity can sneak to escape the sand tornado.";
+    }
+
     public void doDamage(){
         if (foundEntity) {
             affectEntity();

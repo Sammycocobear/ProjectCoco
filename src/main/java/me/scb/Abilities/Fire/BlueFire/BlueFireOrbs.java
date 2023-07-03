@@ -1,35 +1,45 @@
 package me.scb.Abilities.Fire.BlueFire;
 
+import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.BlueFireAbility;
+import com.projectkorra.projectkorra.ability.CoreAbility;
+import com.projectkorra.projectkorra.util.DamageHandler;
 import de.slikey.effectlib.util.MathUtils;
 import me.scb.Configuration.ConfigManager;
 import me.scb.Utils.AbilityUtils;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.BlockDisplay;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import me.scb.ProjectCoco;
+import org.bukkit.util.Vector;
 
 public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
-    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.BlueFire.BlueFireOrbs.Cooldown");
     private final int maxOrbs = Math.max(ConfigManager.getConfig().getInt("Abilities.BlueFire.BlueFireOrbs.OrbCount"),1);
     private final double range = ConfigManager.getConfig().getDouble("Abilities.BlueFire.BlueFireOrbs.OrbRange");
     private final boolean isControllable = ConfigManager.getConfig().getBoolean("Abilities.BlueFire.BlueFireOrbs.IsControllable");
     private final double radius = ConfigManager.getConfig().getDouble("Abilities.BlueFire.BlueFireOrbs.Radius");
     private final double speed = ConfigManager.getConfig().getDouble("Abilities.BlueFire.BlueFireOrbs.Speed");
+    private final double damage = ConfigManager.getConfig().getDouble("Abilities.BlueFire.BlueFireOrbs.Radius");
+    private final double hitbox = ConfigManager.getConfig().getDouble("Abilities.BlueFire.BlueFireOrbs.Speed");
     private boolean isShooting = false;
     List<Orb> orbs = new ArrayList<>();
-    private boolean[] shot = new boolean[maxOrbs];
     public BlueFireOrbs(Player player) {
         super(player);
+        if (CoreAbility.hasAbility(player,getClass()) || !bPlayer.canBend(this)) return;
         final Location location = player.getLocation();
         final double angleIncrement = 360.0 / maxOrbs;
         for (int i = 0; i < maxOrbs; i++) {
-            if (shot[i]) continue;
             double x = radius * Math.sin(Math.toRadians(angle));
             double z = radius * Math.cos(Math.toRadians(angle));
             location.add(x, 0, z);
@@ -43,14 +53,13 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
     }
 
     public void makeSphere(Location location){
-        //instance variables probably
         for (int i = 0; i < 5; i++) {
             location.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,location.clone().add(AbilityUtils.getRandomVector().multiply(.5)),1,0,0,0, ThreadLocalRandom.current().nextBoolean() ? 0 : .05);
         }
     }
 
     public Orb getFirstActiveOrb(){
-        for (int i = 0; i < orbs.size(); i++) {
+        for (int i = 0; i < maxOrbs; i++) {
             Orb orb = orbs.get(i);
             if (orb.getActive()){
                 return orb;
@@ -59,32 +68,31 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
         return null;
     }
 
-    public Orb getClosest(){
-        final Location infront = player.getLocation().add(0, 1, 0).add(player.getLocation().getDirection().multiply(radius));
-        double closestDistance = 0;
-        int count = 0;
-        for (int i = 0; i < orbs.size(); i++) {
-            Orb orb = orbs.get(i);
-            if (orb.getActive()){
-                count++;
-                closestDistance = orb.getLocation().distanceSquared(infront);
-            }
+    public Orb getClosest(){ //This is technically doing one unnecessary distance check but idt its a huge deal since its not being called every tick.
+        final Location infront = player.getLocation().add(0, 1, 0).add(player.getLocation().getDirection().multiply(radius/2));
+        Orb closestOrb = getFirstActiveOrb();
+        if (closestOrb == null){
+            remove();
+            return null;
         }
-        if (count == 1){
-            return orbs.get(0);
-        }
-
-        Orb closestOrb = null;
-        for (Orb orb : orbs){
-            if (!orb.getActive()) continue;
-            Location l = orb.getLocation();
-            double distance = l.distanceSquared(infront);
-            if (closestDistance > distance) {
-                closestOrb = orb;
-                closestDistance = distance;
+        double close = closestOrb.getLocation().distanceSquared(infront);
+        for (int i = 0; i < maxOrbs; i++) {
+            Orb checkOrb = orbs.get(i);
+            if (checkOrb.isShooting() || !checkOrb.getActive()) continue;
+            double dist = checkOrb.getLocation().distanceSquared(infront);
+            if (dist < close){
+                close = dist;
+                closestOrb = checkOrb;
             }
         }
         return closestOrb;
+    }
+
+    public void doDamage(Location location){
+        final LivingEntity entity = GeneralMethods.getClosestLivingEntity(location,hitbox);
+        if (entity != null && !entity.equals(player)) {
+            DamageHandler.damageEntity(entity,player,damage,this);
+        }
     }
 
     double angle = 0;
@@ -92,45 +100,80 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
     public void setShoot(){
         if (isShooting) return;
         isShooting = true;
-        getClosest().setShoot(true);
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_SHROOMLIGHT_PLACE,.5f,2f);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE,.25f,1f);
+
+        Orb closest = getClosest();
+        if (closest == null){
+            remove();
+            return;
+        }
+        closest.setShoot(true);
+        closest.getLocation().getWorld().spawnParticle(Particle.FLASH,closest.getLocation(),1,0,0,0);
     }
 
 
     public void visuals() {
         final Location location = player.getLocation().add(0, 1, 0);
-        final double angleIncrement = 360.0 / maxOrbs; // calculate angle increment for each point
+        final double angleIncrement = 360.0 / maxOrbs; //angle increment for each point
         double speed = .25;
-        for (int i = 0; i < orbs.size(); i++) {
+
+        for (int i = 0; i < maxOrbs; i++) {
             Orb orb = orbs.get(i);
-            if (orb.isShooting()) continue;
+            angle = ((angle + angleIncrement) % 360.0) + speed;
+            if (orb.isShooting() || !orb.getActive()) {
+                continue;
+            }
             double x = radius * Math.sin(Math.toRadians(angle));
             double z = radius * Math.cos(Math.toRadians(angle));
             location.add(x, 0, z);
-            orbs.get(i).setLocation(location.clone());
+            orb.setLocation(location.clone());
             location.subtract(x, 0, z);
-            angle = ((angle + angleIncrement) % 360.0) + speed;
         }
 
 
     }
 
+    public String getInstructions(){
+        return "Sneak to create the orbs and then click to shoot them.";
+    }
 
-
-
+    public String getDescription(){
+        return "While sneaking, you can create a ring of orbs that will orbit around you. To shoot an orb, simply left-click. The orb will inflict damage upon impact.";
+    }
 
     @Override
     public void progress() {
-        if (System.currentTimeMillis() - getStartTime() >= 10000){
+        if (player.isDead() || !player.isOnline()) {
+            remove();
+            return;
+        }else if (GeneralMethods.isRegionProtectedFromBuild(player,player.getLocation())){
             remove();
             return;
         }
-        orbs.removeIf(Orb::run);
+
+        boolean shouldRemove = true;
+        for (Orb orb : orbs) {
+            if (!orb.run()){
+                shouldRemove = false;
+            }
+        }
+
+        if (shouldRemove){
+            remove();
+            return;
+        }
 
         visuals();
 
 
     }
 
+    @Override
+    public void remove() {
+        super.remove();
+        bPlayer.addCooldown(this);
+    }
 
     @Override
     public boolean isSneakAbility() {
@@ -144,7 +187,7 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
 
     @Override
     public long getCooldown() {
-        return 0;
+        return ConfigManager.getConfig().getLong("Abilities.BlueFire.BlueFireOrbs.Cooldown");
     }
 
     @Override
@@ -169,18 +212,18 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
-    @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
+
 
     public class Orb{
 
         private Location location;
-        private Location shotOrigin = null;
+         private Location shotOrigin = null;
         private boolean isActive = true, isShoot = false;
         public Orb(Location location){
             this.location = location;
@@ -191,19 +234,13 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
             if (!getActive()) return true;
             if (isShooting()){
                 if (shoot()){
-                    setActive(false);
-                    setShoot(false);
+                    this.isActive = false;
                     isShooting = false;
-                    player.sendMessage(isActive + " ");
                     return true;
                 }
             }
             makeSphere(location);
             return false;
-        }
-
-        public void setActive(boolean active){
-            this.isActive = active;
         }
 
         public boolean getActive(){
@@ -232,7 +269,7 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
             if (location.distanceSquared(shotOrigin) >= (range * range)){
                 return true;
             }
-
+            doDamage(location);
             location.add(isControllable ? player.getLocation().getDirection().multiply(speed) : shotOrigin.getDirection().multiply(speed));
             makeSphere(location);
             return false;

@@ -4,6 +4,7 @@ import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.LavaAbility;
 import com.projectkorra.projectkorra.util.TempBlock;
+import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,6 +27,11 @@ public class Volcano  extends LavaAbility implements AddonAbility {
         source.add(0,1,0);
         delay = 250;
         start();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 
     @Override
@@ -89,11 +95,11 @@ public class Volcano  extends LavaAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
-    @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
+
 }

@@ -7,10 +7,6 @@ import com.projectkorra.projectkorra.ability.WaterAbility;
 import com.projectkorra.projectkorra.util.DamageHandler;
 import com.projectkorra.projectkorra.util.TempBlock;
 import com.projectkorra.projectkorra.waterbending.ice.PhaseChange;
-import de.slikey.effectlib.effect.CircleEffect;
-import de.slikey.effectlib.effect.CloudEffect;
-import de.slikey.effectlib.util.RandomUtils;
-import me.scb.Abilities.Fire.Lightning.ZigZag;
 import me.scb.Abilities.Water.Ice.Hail;
 import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
@@ -25,10 +21,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +62,7 @@ public class RainCloud extends WaterAbility implements AddonAbility {
     }
 
     public void makeVisuals(){
-        Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius - 1);
+        Vector v = AbilityUtils.getRandomCircleVector().multiply(AbilityUtils.random.nextDouble() * radius - 1);
         for (int i = 0; i < 20; i++) {
 
             location.add(v);
@@ -85,20 +79,20 @@ public class RainCloud extends WaterAbility implements AddonAbility {
                     PhaseChange.getFrozenBlocksMap().put(new TempBlock(floorLocation.getBlock(),Material.SNOW.createBlockData(),timeLeft + snowDuration),player);
                     floorLocation.subtract(v);
                 }
-                location.getWorld().spawnParticle(Particle.SNOW_SHOVEL,location,1,0,0,0,0);
+                location.getWorld().spawnParticle(Particle.BLOCK_CRACK,location,1,0,0,0,0,Material.BLUE_ICE.createBlockData());
                 location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, location.clone().subtract(0,height/2.0,0), 1,0,(height/2.0) - 1.5, 0,0);
             }else{
                 location.getWorld().spawnParticle(Particle.FALLING_WATER, location, 1,0,0, 0,0);
             }
             location.subtract(v);
-            v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius - 1);
+            v = AbilityUtils.getRandomCircleVector().multiply(AbilityUtils.random.nextDouble() * radius - 1);
         }
     }
 
     public void makeCloud(){
         index++;
         for (int i = 0; i < 20; i++) {
-            Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius);
+            Vector v = AbilityUtils.getRandomCircleVector().multiply(AbilityUtils.random.nextDouble() * radius);
             if (RainbowColor.playParticles(player,location.add(v),index,0,0,0,2)){
                 location.getWorld().spawnParticle(Particle.CLOUD, location, 1,0,0, 0,0);
             }
@@ -152,7 +146,7 @@ public class RainCloud extends WaterAbility implements AddonAbility {
     public static List<RainCloud> getRainCloudsInArea(Player player, double distance){
         List<RainCloud> returnList = new ArrayList<>();
         for (CoreAbility ability : RainCloud.getAbilitiesByInstances()){
-            if (!ability.getName().equals("RainCloud")) continue;
+            if (!(ability instanceof RainCloud)) continue;
             if (ability.getLocation().distanceSquared(player.getLocation()) < distance * distance){
                 returnList.add((RainCloud) ability);
             }
@@ -164,6 +158,9 @@ public class RainCloud extends WaterAbility implements AddonAbility {
     @Override
     public void remove() {
         super.remove();
+        if (isHailing) {
+            hailInstance.remove();
+        }
     }
 
     @Override
@@ -208,5 +205,13 @@ public class RainCloud extends WaterAbility implements AddonAbility {
     @Override
     public String getVersion() {
         return ProjectCoco.getVersion();
+    }
+
+    public String getInstructions(){
+        return "Left click to summon a RainCloud";
+    }
+
+    public String getDescription(){
+        return "Create a RainCloud that can grow plants, water Farmland. You can combine RainCloud with the Hail combo to turn any RainCloud near you into hail!";
     }
 }

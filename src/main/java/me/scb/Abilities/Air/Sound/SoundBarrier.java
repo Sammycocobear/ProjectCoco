@@ -20,7 +20,6 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
     private static final double MAX_SPEED = .75;
     private static final int TICKS_PER_SPEED_INCREASE = 5;
     private static final float acceleration = (float) .02;
-    private int runningTime;
     private int tickCounter;
     private boolean blastSound = false;
     private double cosX, sinX, cosY, sinY;
@@ -33,18 +32,13 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
 
     @Override
     public void progress() {
-
-
-
-        if (!player.isSprinting()) {
-            runningTime = 0;
+        if (!player.isSprinting() || player.isSneaking()) {
             player.setWalkSpeed(0.2f);
             tickCounter = 0;
             blastSound = false;
             return;
         }
 
-        runningTime++;
         tickCounter++;
         if (tickCounter >= TICKS_PER_SPEED_INCREASE) {
             double speed = Math.min(MAX_SPEED, player.getWalkSpeed() + acceleration);
@@ -59,7 +53,7 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
                 blastSound = true;
             }
             yaw = Math.toRadians(player.getLocation().getYaw() + 180);
-            pitch = Math.toRadians(player.getLocation().getPitch() - 90);
+            pitch = Math.toRadians(-90);
 
             cosX = Math.cos(pitch);
             sinX = Math.sin(pitch);
@@ -75,8 +69,8 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
                 vector = rotateAroundAxisY(vector, cosY, sinY);
                 vector.multiply(.08);
                 playerLoc.add(vector);
-                angle += .08;
-                if (RainbowColor.playParticles(player,playerLoc,index)) {
+                angle += .15;
+                if (RainbowColor.playParticles(player,playerLoc,index,0,0,0,1.5f)) {
                     player.getLocation().getWorld().spawnParticle(Particle.CLOUD, playerLoc, 1, 0, 0, 0, 0);
                 }
                 playerLoc.subtract(vector);
@@ -167,4 +161,13 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
         double z = v.getX() * -sin + v.getZ() * cos;
         return v.setX(x).setZ(z);
     }
+
+    public String getInstructions(){
+        return "Continuously run until you hear an explosion and particles appear behind you.";
+    }
+
+    public String getDescription(){
+        return "This passive ability allows you to build up speed while running until you break the sound barrier, enabling you to damage entities you collide with. To use this ability, simply start running and continue until you reach maximum speed. Once you break the sound barrier, any entities you come into contact with will take damage.";
+    }
+
 }

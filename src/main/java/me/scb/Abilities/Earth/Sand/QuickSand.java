@@ -29,7 +29,7 @@ import java.util.ListIterator;
 public class QuickSand extends SandAbility implements AddonAbility {
     private final int maxRadius = ConfigManager.getConfig().getInt("Abilities.Sand.QuickSand.Radius");
     private final long radiusIncreaseDelay = ConfigManager.getConfig().getLong("Abilities.Sand.QuickSand.RadiusIncreaseDelay");
-
+    private final long duration = ConfigManager.getConfig().getLong("Abilities.Sand.QuickSand.Duration");
     private long next;
     private int radius = 0;
     private final List<TempBlock> tempBlocks = new ArrayList<>();
@@ -55,11 +55,6 @@ public class QuickSand extends SandAbility implements AddonAbility {
             next = System.currentTimeMillis() + radiusIncreaseDelay;
             circle = GeneralMethods.getCircle(origin, ++radius, 1, false, false, 0);
         }
-
-
-        //circle.removeIf(l -> l.getBlockY() > origin.getBlockY() + 1 || l.getBlock().getRelative(BlockFace.UP).isSolid());
-
-
 
 
         for (Location l : circle) {
@@ -107,7 +102,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     @Override
     public void progress() {
-        if (System.currentTimeMillis() - getStartTime() >= 5000){
+        if (System.currentTimeMillis() - getStartTime() >= duration){
             remove();
             return;
         }
@@ -132,6 +127,14 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     }
 
+    public String getInstructions(){
+        return "Click to spawn QuickSand to wherever you're looking";
+    }
+
+    public String getDescription(){
+        return "To use QuickSand, simply left-click to spawn quicksand at the targeted location. Anyone caught inside the quicksand will experience slowed movement. The quicksand will gradually expand its radius over time.";
+    }
+
     @Override
     public boolean isSneakAbility() {
         return false;
@@ -154,7 +157,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     @Override
     public Location getLocation() {
-        return null;
+        return origin;
     }
 
     @Override

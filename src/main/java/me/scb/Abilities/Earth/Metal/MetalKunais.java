@@ -1,33 +1,23 @@
-package me.scb.Abilities.Earth.Lava;
+package me.scb.Abilities.Earth.Metal;
 
 import com.projectkorra.projectkorra.ability.AddonAbility;
-import com.projectkorra.projectkorra.ability.LavaAbility;
-import com.projectkorra.projectkorra.util.TempBlock;
+import com.projectkorra.projectkorra.ability.MetalAbility;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import me.scb.ProjectCoco;
 
-public class LavaCrush extends LavaAbility implements AddonAbility {
-    private long maxDuration = 5000;//config
-    private long radius = 5;
-    private Set<TempBlock> tempBlocks = new HashSet<>();
-    public LavaCrush(Player player) {
+
+public class MetalKunais extends MetalAbility implements AddonAbility {
+
+    public MetalKunais(Player player) {
         super(player);
     }
 
     @Override
     public void progress() {
 
+    }
 
-    }
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
     @Override
     public boolean isSneakAbility() {
         return false;
@@ -45,7 +35,7 @@ public class LavaCrush extends LavaAbility implements AddonAbility {
 
     @Override
     public String getName() {
-        return "LavaCrush";
+        return "MetalKunais";
     }
 
     @Override

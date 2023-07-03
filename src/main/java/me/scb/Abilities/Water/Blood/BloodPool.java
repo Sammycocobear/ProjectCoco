@@ -3,6 +3,7 @@ package me.scb.Abilities.Water.Blood;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.BloodAbility;
+import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.util.DamageHandler;
 import me.scb.Abilities.Water.Blood.BloodUtils.SourceAnimation;
 import me.scb.Configuration.ConfigManager;
@@ -38,6 +39,7 @@ public class BloodPool extends BloodAbility implements AddonAbility {
     private int poolRotation = 0;
     public BloodPool(Player player) {
         super(player);
+        if (CoreAbility.hasAbility(player,getClass()) || !bPlayer.canBend(this)) return;
         final Entity target = GeneralMethods.getTargetedEntity(player,sourceRange);
 
         if (!(target instanceof LivingEntity)) return;
@@ -66,6 +68,13 @@ public class BloodPool extends BloodAbility implements AddonAbility {
 
     @Override
     public void progress() {
+        if (player.isDead() || !player.isOnline()) {
+            remove();
+            return;
+        }else if (GeneralMethods.isRegionProtectedFromBuild(player,player.getLocation())){
+            remove();
+            return;
+        }
         if (System.currentTimeMillis() - getStartTime() >= 5000 && !hasMadePool){
             remove();
             return;
@@ -174,6 +183,8 @@ public class BloodPool extends BloodAbility implements AddonAbility {
         public boolean makePool(){
             if (System.currentTimeMillis() - startTime >= 5000){
                 return true;
+            }else if (GeneralMethods.isRegionProtectedFromBuild(player,location)) {
+                return true;
             }
 
             for (int i = -180; i < 180; i += 30) {
@@ -206,6 +217,12 @@ public class BloodPool extends BloodAbility implements AddonAbility {
         }
     }
 
+    public String getInstructions(){
+        return "Sneak at an entity to source from them. Left click again to creat a pool in any direction you're looking.";
+    }
 
+    public String getDescription(){
+        return "Use this ability to kill your enemies in their own blood. This ability will take your enemies blood and allows you to create pools of it to drown your enemies.";
+    }
 
 }

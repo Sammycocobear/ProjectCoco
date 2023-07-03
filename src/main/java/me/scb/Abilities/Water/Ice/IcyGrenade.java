@@ -44,6 +44,10 @@ public class IcyGrenade extends IceAbility implements AddonAbility {
         fallingBlock.setVelocity(l.getDirection().multiply(1.5));
         bPlayer.addCooldown(this,3000);
     }
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
     @Override
     public void progress() {

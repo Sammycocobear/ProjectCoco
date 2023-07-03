@@ -56,5 +56,4 @@ public final class ProjectCoco extends JavaPlugin {
     }
 
 
-
 }

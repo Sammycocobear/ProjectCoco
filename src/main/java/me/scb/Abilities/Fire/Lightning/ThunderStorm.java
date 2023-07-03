@@ -8,8 +8,6 @@ import com.projectkorra.projectkorra.ability.LightningAbility;
 import com.projectkorra.projectkorra.ability.util.ComboManager;
 import com.projectkorra.projectkorra.util.ClickType;
 import com.projectkorra.projectkorra.util.DamageHandler;
-import de.slikey.effectlib.util.RandomUtils;
-import me.scb.Abilities.Water.RainCloud;
 import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
@@ -28,7 +26,9 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
     private final double radius = ConfigManager.getConfig().getDouble("Abilities.Lightning.ThunderStorm.Radius");
     private final double sourceRange = ConfigManager.getConfig().getDouble("Abilities.Lightning.ThunderStorm.SourceRange");
     private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Lightning.ThunderStorm.Cooldown");
-    private final double height = ConfigManager.getConfig().getLong("Abilities.Lightning.ThunderStorm.Height");
+    private final double height = ConfigManager.getConfig().getDouble("Abilities.Lightning.ThunderStorm.Height");
+    private final double damage = ConfigManager.getConfig().getDouble("Abilities.Lightning.ThunderStorm.Damage");
+    private final double hitbox = ConfigManager.getConfig().getDouble("Abilities.Lightning.ThunderStorm.Hitbox");
 
 
     private Location location;
@@ -49,7 +49,7 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
 
     public void makeCloud(){
         for (int i = 0; i < 20; i++) {
-            Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius);
+            Vector v = AbilityUtils.getRandomCircleVector().multiply(AbilityUtils.random.nextDouble() * radius);
             location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location.add(v), 1,0,0, 0,0);
             location.subtract(v);
         }
@@ -57,9 +57,9 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
 
 
     public void doDamage(Location location) {
-        for (Entity entity : GeneralMethods.getEntitiesAroundPoint(location, 1)) {
+        for (Entity entity : GeneralMethods.getEntitiesAroundPoint(location, hitbox)) {
             if (AbilityUtils.isInValidEntity(entity, player) /*|| entityList.contains(entity)*/) continue;
-            DamageHandler.damageEntity(entity,player,2,this);
+            DamageHandler.damageEntity(entity,player,damage,this);
         }
 
     }
@@ -68,7 +68,7 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
         location.getWorld().spawnParticle(Particle.FLASH,location,1,.5,.5,.5,0);
         for (int i = 0; i < (int) (Math.random() * 5); i++){
             Location cloneLocation, floorLocation;
-            cloneLocation = location.clone().add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * radius - 1));
+            cloneLocation = location.clone().add(AbilityUtils.getRandomCircleVector().multiply(AbilityUtils.random.nextDouble() * radius - 1));
             floorLocation = cloneLocation.clone().subtract(0,height + 1, 0);
             floorLocation.setPitch(90);
             thunderStrikes.add(new ZigZag(cloneLocation,floorLocation, player));
@@ -78,6 +78,12 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
     @Override
     public void progress() {
         if (System.currentTimeMillis() - getStartTime() >= 3000){
+            remove();
+            return;
+        }else if (player.isDead() || !player.isOnline()){
+            remove();
+            return;
+        }else if (GeneralMethods.isRegionProtectedFromBuild(player,location)){
             remove();
             return;
         }
@@ -156,8 +162,19 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
     @Override
     public ArrayList<ComboManager.AbilityInformation> getCombination() {
         ArrayList<ComboManager.AbilityInformation> re = new ArrayList<>();
-        re.add(new ComboManager.AbilityInformation("Lightning", ClickType.LEFT_CLICK));
+        re.add(new ComboManager.AbilityInformation("Lightning", ClickType.SHIFT_DOWN));
+        re.add(new ComboManager.AbilityInformation("Lightning", ClickType.SHIFT_UP));
+        re.add(new ComboManager.AbilityInformation("LightningBurst", ClickType.LEFT_CLICK));
+
         return re;
+    }
+
+    public String getInstructions(){
+        return "Lightning (Tap Sneak) -> LightningBurst (Left Click)";
+    }
+
+    public String getDescription(){
+        return "This combo conjures a menacing thunderstorm overhead. As dark clouds gather, occasional lightning strikes cause damage to entities caught within its reach, delivering a shocking impact.";
     }
 
 

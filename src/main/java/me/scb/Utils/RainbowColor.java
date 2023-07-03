@@ -37,7 +37,7 @@ public class RainbowColor {
 
 
     public static boolean playParticles(Player player, Location loc, int index) {
-        if (!player.getUniqueId().equals(UUID.fromString("7159aaec-c7f2-4fc2-86cc-09e3fa303c40")) || !EasterEggListener.hasEasterEgg()) {
+        if (!EasterEggListener.hasEasterEgg(player)) {
             return true;
         }
         //final int index = (int) (System.currentTimeMillis() % RAINBOW_PARTICLES.length);
@@ -46,7 +46,7 @@ public class RainbowColor {
     }
 
     public static boolean playParticles(Player player, Location loc, int index, double x, double y, double z) {
-        if (!player.getUniqueId().equals(UUID.fromString("7159aaec-c7f2-4fc2-86cc-09e3fa303c40")) || !EasterEggListener.hasEasterEgg()) {
+        if (!EasterEggListener.hasEasterEgg(player)) {
             return true;
         }
         //final int index = (int) (System.currentTimeMillis() % RAINBOW_PARTICLES.length);
@@ -56,7 +56,7 @@ public class RainbowColor {
 
 
     public static boolean playParticles(Player player, Location loc, int index, double x, double y, double z, float size) {
-        if (!player.getUniqueId().equals(UUID.fromString("7159aaec-c7f2-4fc2-86cc-09e3fa303c40")) || !EasterEggListener.hasEasterEgg()) {
+        if (!EasterEggListener.hasEasterEgg(player)) {
             return true;
         }
         //final int index = (int) (System.currentTimeMillis() % RAINBOW_PARTICLES.length);
