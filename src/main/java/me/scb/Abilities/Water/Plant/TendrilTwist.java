@@ -97,9 +97,6 @@ public class TendrilTwist extends PlantAbility implements AddonAbility {
         }else if (distance >= range){
             remove();
             return;
-        }else if (GeneralMethods.isRegionProtectedFromBuild(this,location)){
-            remove();
-            return;
         }
 
         if (!hasShot){
@@ -109,6 +106,10 @@ public class TendrilTwist extends PlantAbility implements AddonAbility {
             }
             playFocusWaterEffect(sourceBlock);
         }else {
+            if (GeneralMethods.isRegionProtectedFromBuild(this,location)){
+                remove();
+                return;
+            }
 
             if (effect!= null && !effect.doEffect()){
                 remove();
