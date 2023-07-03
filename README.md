@@ -16,6 +16,7 @@ Sub-Element addon pack for ProjectKorra
     - SandPad
 - Lava
 - Metal
+    - Reconfigure
 
 ### Water
 - RainCloud
@@ -48,4 +49,4 @@ To edit the configuration of abilities, follow these steps:
 3. Save the file before restarting your server.
 
 ## Support
-If you need support or have any questions, you can contact Sammy<3#0001 on Discord.
+If you need support or have any questions, you can contact fatassbomberhoe on Discord.
