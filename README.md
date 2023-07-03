@@ -7,12 +7,13 @@ Sub-Element addon pack for ProjectKorra
     - CombustionBomb
 - Lightning
     - Railgun
-    - ThunderStorm
+    - ThunderStorm **(combo)**
 
 ### Earth
 - Sand
     - SandTornado
     - QuickSand
+    - SandPad
 - Lava
 - Metal
 
@@ -20,9 +21,20 @@ Sub-Element addon pack for ProjectKorra
 - RainCloud
 - Blood
     - BloodBlink
+    - BloodPool
 - Healing
+    - RefreshingRain
 - Ice
-    - Hail
+    - Hail **(combo)**
+- Plant
+    - SeedSummoner **(multiability)**
+    
+### Air
+- Sound
+   - SoundBarrier **(passive)**
+- Spiritual
+   - SummonSpirits
+
 
 ## Installation
 1. Download the addon pack.
