@@ -30,7 +30,7 @@ public class ThunderStorm extends LightningAbility implements AddonAbility, Comb
     private final double damage = ConfigManager.getConfig().getDouble("Abilities.Lightning.ThunderStorm.Damage");
     private final double hitbox = ConfigManager.getConfig().getDouble("Abilities.Lightning.ThunderStorm.Hitbox");
 
- 
+
     private Location location;
     private final List<ZigZag> thunderStrikes = new ArrayList<>();
     private int ticks;
