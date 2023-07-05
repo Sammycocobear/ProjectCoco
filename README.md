@@ -49,4 +49,4 @@ To edit the configuration of abilities, follow these steps:
 3. Save the file before restarting your server.
 
 ## Support
-If you need support or have any questions, you can contact fatassbomberhoe on Discord.
+If you need support or have any questions, you can ask inside of the ProjectCoco discord server: https://discord.gg/sfvDDve4aY
