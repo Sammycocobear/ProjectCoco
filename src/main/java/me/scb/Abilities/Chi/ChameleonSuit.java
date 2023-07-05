@@ -6,7 +6,6 @@ import com.projectkorra.projectkorra.ability.ChiAbility;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.PassiveAbility;
 import me.scb.Configuration.ConfigManager;
-import me.scb.Utils.AbilityUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -63,11 +62,11 @@ public class ChameleonSuit extends ChiAbility implements AddonAbility {
 			return;
 
 		final FileConfiguration config = ConfigManager.getConfig();
-		this.cooldown = config.getLong(AbilityUtils.getConfigPatch(this, "Cooldown"));
-		this.detectionDistance = config.getDouble(AbilityUtils.getConfigPatch(this, "DetectionDistance"));
-		this.disengageOnHit = config.getBoolean(AbilityUtils.getConfigPatch(this, "DisengageOnHit"));
+		this.cooldown = config.getLong("Abilities.Chi.ChameleonSuit.Cooldown");
+		this.detectionDistance = config.getDouble("Abilities.Chi.ChameleonSuit.DetectionDistance");
+		this.disengageOnHit = config.getBoolean("Abilities.Chi.ChameleonSuit.DisengageOnHit");
 
-		this.speed = new PotionEffect(PotionEffectType.SPEED, 2, config.getInt(AbilityUtils.getConfigPatch(this, "SpeedPotency")), false, false, false);
+		this.speed = new PotionEffect(PotionEffectType.SPEED, 2, config.getInt("Abilities.Chi.ChameleonSuit.SpeedPotency"), false, false, false);
 		this.status = BossBar.bossBar(Component.text(), 1.0f, BossBar.Color.PURPLE, BossBar.Overlay.PROGRESS, Set.of(BossBar.Flag.DARKEN_SCREEN));
 
 		this.origin = this.player.getWorld();
