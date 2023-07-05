@@ -5,24 +5,18 @@ import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.BlueFireAbility;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.util.DamageHandler;
-import de.slikey.effectlib.util.MathUtils;
 import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import me.scb.ProjectCoco;
-import org.bukkit.util.Vector;
 
 public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
     private final int maxOrbs = Math.max(ConfigManager.getConfig().getInt("Abilities.BlueFire.BlueFireOrbs.OrbCount"),1);

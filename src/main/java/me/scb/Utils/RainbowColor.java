@@ -1,13 +1,10 @@
 package me.scb.Utils;
 
-import me.scb.Listener.AbilityListener;
 import me.scb.Listener.EasterEggListener;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class RainbowColor {
     private static final Particle.DustOptions white =

@@ -1,24 +1,18 @@
 package me.scb.Abilities.Earth.Metal;
 
-import com.destroystokyo.paper.MaterialSetTag;
 import com.google.common.collect.ImmutableSet;
 import com.projectkorra.projectkorra.ability.AddonAbility;
-import com.projectkorra.projectkorra.ability.CoreAbility;
-import com.projectkorra.projectkorra.ability.EarthAbility;
 import com.projectkorra.projectkorra.ability.MetalAbility;
+import me.scb.ProjectCoco;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import me.scb.ProjectCoco;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Comparator;
 
 public class Reconfigure extends MetalAbility implements AddonAbility {
 

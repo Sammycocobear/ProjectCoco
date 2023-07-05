@@ -2,9 +2,9 @@ package me.scb.Abilities.Earth.Metal;
 
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.MetalAbility;
+import me.scb.ProjectCoco;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import me.scb.ProjectCoco;
 
 
 public class MetalKunais extends MetalAbility implements AddonAbility {

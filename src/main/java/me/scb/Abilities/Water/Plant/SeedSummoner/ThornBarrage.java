@@ -1,10 +1,8 @@
 package me.scb.Abilities.Water.Plant.SeedSummoner;
 
 import com.projectkorra.projectkorra.GeneralMethods;
-import com.projectkorra.projectkorra.ability.ComboAbility;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.PlantAbility;
-import com.projectkorra.projectkorra.ability.util.ComboManager;
 import com.projectkorra.projectkorra.util.DamageHandler;
 import me.scb.Configuration.ConfigManager;
 import me.scb.Utils.AbilityUtils;

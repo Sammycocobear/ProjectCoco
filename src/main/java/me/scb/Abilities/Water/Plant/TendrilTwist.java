@@ -1,7 +1,6 @@
 package me.scb.Abilities.Water.Plant;
 
 import com.projectkorra.projectkorra.GeneralMethods;
-import com.projectkorra.projectkorra.ability.Ability;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.PlantAbility;
@@ -9,7 +8,6 @@ import com.projectkorra.projectkorra.util.BlockSource;
 import com.projectkorra.projectkorra.util.ClickType;
 import com.projectkorra.projectkorra.util.DamageHandler;
 import com.projectkorra.projectkorra.util.TempBlock;
-import de.slikey.effectlib.effect.VortexEffect;
 import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
 import org.bukkit.*;

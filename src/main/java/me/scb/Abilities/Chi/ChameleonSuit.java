@@ -1,8 +1,10 @@
 package me.scb.Abilities.Chi;
 
 import com.projectkorra.projectkorra.GeneralMethods;
-import com.projectkorra.projectkorra.ability.*;
-import com.projectkorra.projectkorra.earthbending.Tremorsense;
+import com.projectkorra.projectkorra.ability.AddonAbility;
+import com.projectkorra.projectkorra.ability.ChiAbility;
+import com.projectkorra.projectkorra.ability.CoreAbility;
+import com.projectkorra.projectkorra.ability.PassiveAbility;
 import me.scb.Configuration.ConfigManager;
 import me.scb.Utils.AbilityUtils;
 import net.kyori.adventure.audience.Audience;

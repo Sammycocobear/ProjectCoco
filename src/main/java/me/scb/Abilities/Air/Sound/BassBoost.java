@@ -1,15 +1,12 @@
 package me.scb.Abilities.Air.Sound;
 
 import com.projectkorra.projectkorra.ability.AddonAbility;
-import de.slikey.effectlib.effect.VortexEffect;
-import de.slikey.effectlib.util.MathUtils;
-import de.slikey.effectlib.util.VectorUtils;
 import me.scb.Abilities.Air.Sound.SoundElement.SoundAbility;
+import me.scb.ProjectCoco;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import me.scb.ProjectCoco;
 
 public class BassBoost extends SoundAbility implements AddonAbility {
     public BassBoost(Player player) {

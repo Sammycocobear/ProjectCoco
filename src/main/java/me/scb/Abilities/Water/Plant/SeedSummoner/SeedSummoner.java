@@ -7,13 +7,13 @@ import com.projectkorra.projectkorra.ability.MultiAbility;
 import com.projectkorra.projectkorra.ability.PlantAbility;
 import com.projectkorra.projectkorra.ability.util.MultiAbilityManager;
 import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import me.scb.ProjectCoco;
 
 public class SeedSummoner extends PlantAbility implements AddonAbility, MultiAbility {
     List<CoreAbility> abilities = new ArrayList<>();

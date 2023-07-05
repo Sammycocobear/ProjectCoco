@@ -4,11 +4,12 @@ import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.HealingAbility;
-import me.scb.Configuration.Config;
 import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
 import me.scb.Utils.RainbowColor;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.ThreadLocalRandom;

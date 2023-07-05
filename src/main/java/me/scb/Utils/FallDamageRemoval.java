@@ -4,8 +4,6 @@ import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class FallDamageRemoval {
     private static Map<LivingEntity, Double> tracker = new HashMap<>();

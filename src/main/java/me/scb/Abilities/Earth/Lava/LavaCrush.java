@@ -3,13 +3,12 @@ package me.scb.Abilities.Earth.Lava;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.LavaAbility;
 import com.projectkorra.projectkorra.util.TempBlock;
+import me.scb.ProjectCoco;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import me.scb.ProjectCoco;
 
 public class LavaCrush extends LavaAbility implements AddonAbility {
     private long maxDuration = 5000;//config
