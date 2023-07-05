@@ -7,6 +7,7 @@ import com.projectkorra.projectkorra.util.TempBlock;
 import com.projectkorra.projectkorra.waterbending.ice.PhaseChange;
 import me.scb.Configuration.Config;
 import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import me.scb.Utils.TempFallingBlock;
 import org.bukkit.Bukkit;
@@ -26,9 +27,9 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class QuickSand extends SandAbility implements AddonAbility {
-    private final int maxRadius = ConfigManager.getConfig().getInt(AbilityUtils.getConfigPatch(this,"Radius"));
-    private final long radiusIncreaseDelay = ConfigManager.getConfig().getLong(AbilityUtils.getConfigPatch(this,"RadiusIncreaseDelay"));
-
+    private final int maxRadius = ConfigManager.getConfig().getInt("Abilities.Sand.QuickSand.Radius");
+    private final long radiusIncreaseDelay = ConfigManager.getConfig().getLong("Abilities.Sand.QuickSand.RadiusIncreaseDelay");
+    private final long duration = ConfigManager.getConfig().getLong("Abilities.Sand.QuickSand.Duration");
     private long next;
     private int radius = 0;
     private final List<TempBlock> tempBlocks = new ArrayList<>();
@@ -37,7 +38,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
     List<Location> circle;
     public QuickSand(Player player) {
         super(player);
-        int range = ConfigManager.getConfig().getInt(AbilityUtils.getConfigPatch(this, "SourceRange"));
+        int range = ConfigManager.getConfig().getInt("Abilities.Sand.QuickSand.SourceRange");
         final Block loc = player.getTargetBlockExact(range);
         if (loc == null) return;
         origin = loc.getLocation().add(.5,.5,.5);
@@ -56,17 +57,12 @@ public class QuickSand extends SandAbility implements AddonAbility {
         }
 
 
-        //circle.removeIf(l -> l.getBlockY() > origin.getBlockY() + 1 || l.getBlock().getRelative(BlockFace.UP).isSolid());
-
-
-
-
         for (Location l : circle) {
             l.clone().add(.5, .5, .5);
             final Block b = l.getBlock();
             if (!isEarthbendable(b)) continue;
             tempBlocks.add(new TempBlock(b, Material.AIR));
-            FallingBlock fb = new TempFallingBlock(l.add(.5,.5,.5),Material.SAND.createBlockData()).getFallingBlock();
+            FallingBlock fb = AbilityUtils.createFallingBlock(l.add(.5,.5,.5),Material.SAND);
             fb.setVelocity(new Vector(0,Math.random() * .15,0));
             fallingBlocks.add(fb);
         }
@@ -85,7 +81,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
         while(iter.hasNext()){
             final FallingBlock fb = iter.next();
             if(fb.isDead()){
-                FallingBlock f = new TempFallingBlock(fb.getLocation(),Material.SAND.createBlockData()).getFallingBlock();
+                FallingBlock f = AbilityUtils.createFallingBlock(fb.getLocation(),Material.SAND);
                 iter.remove();
                 f.setVelocity(new Vector(0,Math.random() * .15,0));
                 iter.add(f);
@@ -95,7 +91,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
                 }
             }
             for (Entity entity : GeneralMethods.getEntitiesAroundPoint(fb.getLocation(),.5)){
-                if (AbilityUtils.isInValidEntity(entity) || !entity.getLocation().subtract(0,.1,0).getBlock().isSolid()) continue;
+                if (AbilityUtils.isInValidEntity(entity) || !entity.getLocation().subtract(0,.1,0).getBlock().getType().isSolid()) continue;
                 entity.setVelocity(entity.getVelocity().multiply(.5));
             }
             fb.getWorld().spawnParticle(Particle.BLOCK_DUST,fb.getLocation(),1,.5,.5,.5,0,Material.END_STONE.createBlockData());
@@ -106,7 +102,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     @Override
     public void progress() {
-        if (System.currentTimeMillis() - getStartTime() >= 5000){
+        if (System.currentTimeMillis() - getStartTime() >= duration){
             remove();
             return;
         }
@@ -131,6 +127,14 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     }
 
+    public String getInstructions(){
+        return "Click to spawn QuickSand to wherever you're looking";
+    }
+
+    public String getDescription(){
+        return "To use QuickSand, simply left-click to spawn quicksand at the targeted location. Anyone caught inside the quicksand will experience slowed movement. The quicksand will gradually expand its radius over time.";
+    }
+
     @Override
     public boolean isSneakAbility() {
         return false;
@@ -143,7 +147,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     @Override
     public long getCooldown() {
-        return ConfigManager.getConfig().getLong(AbilityUtils.getConfigPatch(this,"Cooldown"));
+        return ConfigManager.getConfig().getLong("Abilities.Sand.QuickSand.Cooldown");
     }
 
     @Override
@@ -153,7 +157,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     @Override
     public Location getLocation() {
-        return null;
+        return origin;
     }
 
     @Override
@@ -168,11 +172,11 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
     @Override
     public String getAuthor() {
-        return null;
+        return ProjectCoco.getAuthor();
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return ProjectCoco.getVersion();
     }
 }
