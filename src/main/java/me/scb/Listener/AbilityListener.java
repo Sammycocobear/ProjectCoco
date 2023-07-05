@@ -5,6 +5,7 @@ import com.projectkorra.projectkorra.ability.Ability;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.PassiveAbility;
 import com.projectkorra.projectkorra.event.AbilityStartEvent;
+import com.projectkorra.projectkorra.event.AbilityVelocityAffectEntityEvent;
 import me.scb.Abilities.Air.Sound.BassBoost;
 import me.scb.Abilities.Air.Spiritual.SummonSpirits;
 import me.scb.Abilities.Chi.ChameleonSuit;
@@ -343,5 +344,12 @@ public class AbilityListener implements Listener {
         final ChameleonSuit suit = CoreAbility.getAbility(player, ChameleonSuit.class);
         if (suit != null && suit.shouldDisengageOnHit())
             suit.remove();
+    }
+
+    @EventHandler
+    public void onQuickSandMove(AbilityVelocityAffectEntityEvent e){
+        if (e.getAffected().hasMetadata("ProjectCoco://TempFallingBlock")) {
+            e.setCancelled(true);
+        }
     }
 }

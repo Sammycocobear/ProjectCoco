@@ -2,6 +2,7 @@ package me.scb;
 
 import com.projectkorra.projectkorra.Element;
 import com.projectkorra.projectkorra.ability.CoreAbility;
+import me.scb.Commands.ReloadCommand;
 import me.scb.Configuration.ConfigManager;
 import me.scb.Listener.AbilityListener;
 import me.scb.Listener.DamageHandlerListener;
@@ -10,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ProjectCoco extends JavaPlugin {
     private static ProjectCoco plugin;
-    private static final String author = "bbakaa";
+    private static final String author = "Sammy";
     private static final String version = "PRE-RELEASE-1.0.1";
 
     public static boolean hasSound(){
@@ -29,6 +30,7 @@ public final class ProjectCoco extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        new ReloadCommand();
         new ConfigManager();
         CoreAbility.registerPluginAbilities(this,"me.scb.Abilities");
         getPlugin().getServer().getPluginManager().registerEvents(new AbilityListener(),plugin);

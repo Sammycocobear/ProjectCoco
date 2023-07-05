@@ -5,16 +5,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigManager {
 
-    public static Config configPath;
-    public static final FileConfiguration config = ProjectCoco.getPlugin().getConfig();
+    public static Config configPath = new Config("config.yml");
+
     public ConfigManager() {
         this.defaults();
-        configPath = new Config("config.yml");
         this.deathmessages();
     }
 
-    public static FileConfiguration getConfig(){
-        return config;
+    public static FileConfiguration getConfig() {
+        return ProjectCoco.getPlugin().getConfig();
     }
 
 
@@ -36,7 +35,7 @@ public class ConfigManager {
 
 
     public void defaults(){
-        FileConfiguration config = getConfig();
+        FileConfiguration config = ProjectCoco.getPlugin().getConfig();
         String path = "Abilities.Sand.";
         config.addDefault(path + "SandTornado.Cooldown",5000);
         config.addDefault(path + "SandTornado.SourceRange",10);

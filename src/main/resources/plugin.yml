@@ -5,3 +5,10 @@ api-version: 1.17
 depend: [ ProjectKorra, ProtocolLib]
 softdepend:
   - ProjectAddons
+permissions:
+  bending.command.projectcoco:
+    default: true
+    description: Shows info about ProjectCoco.
+  bending.command.projectcoco.reload:
+    default: op
+    description: Reload the config of ProjectCoco.
