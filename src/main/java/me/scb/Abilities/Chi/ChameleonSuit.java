@@ -6,6 +6,7 @@ import com.projectkorra.projectkorra.ability.ChiAbility;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.PassiveAbility;
 import me.scb.Configuration.ConfigManager;
+import me.scb.ProjectCoco;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -205,7 +206,7 @@ public class ChameleonSuit extends ChiAbility implements AddonAbility {
 
 	@Override
 	public Location getLocation() {
-		return null;
+		return player.getLocation();
 	}
 
 	@Override
@@ -220,11 +221,11 @@ public class ChameleonSuit extends ChiAbility implements AddonAbility {
 
 	@Override
 	public String getAuthor() {
-		return "ProjectCoco";
+		return "Jef";
 	}
 
 	@Override
 	public String getVersion() {
-		return null;
+		return ProjectCoco.getVersion();
 	}
 }

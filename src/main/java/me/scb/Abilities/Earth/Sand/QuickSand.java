@@ -2,6 +2,7 @@ package me.scb.Abilities.Earth.Sand;
 
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
+import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.SandAbility;
 import com.projectkorra.projectkorra.util.TempBlock;
 import me.scb.Configuration.ConfigManager;
@@ -32,6 +33,7 @@ public class QuickSand extends SandAbility implements AddonAbility {
     List<Location> circle;
     public QuickSand(Player player) {
         super(player);
+        if (CoreAbility.hasAbility(player,getClass()) || !bPlayer.canBend(this)) return;
         int range = ConfigManager.getConfig().getInt("Abilities.Sand.QuickSand.SourceRange");
         final Block loc = player.getTargetBlockExact(range);
         if (loc == null) return;
