@@ -52,6 +52,7 @@ public class ConfigManager {
 
         config.addDefault(path + "QuickSand.SourceRange",15);
         config.addDefault(path + "QuickSand.Cooldown",5000);
+        config.addDefault(path + "QuickSand.Duration",6000);
         config.addDefault(path + "QuickSand.Radius",5);
         config.addDefault(path + "QuickSand.RadiusIncreaseDelay",250);
 
@@ -95,7 +96,7 @@ public class ConfigManager {
         config.addDefault(path + "ThunderStorm.Height",5);
         config.addDefault(path + "ThunderStorm.Cooldown",5000);
         config.addDefault(path + "ThunderStorm.Damage",2);
-        config.addDefault(path + "ThunderStorm.Hotbox",1);
+        config.addDefault(path + "ThunderStorm.Hitbox",1);
 
         path = "Abilities.BlueFire.";
 
