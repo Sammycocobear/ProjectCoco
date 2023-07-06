@@ -10,6 +10,7 @@ import me.scb.Utils.RainbowColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -67,7 +68,7 @@ public class RefreshingRain extends HealingAbility implements AddonAbility {
 
                 if (System.currentTimeMillis() >= next) {
                     next = System.currentTimeMillis() + healingDelay;
-                    player.setHealth(Math.min(player.getHealth() + healingPerDelay, 20));
+                    player.setHealth(Math.min(player.getHealth() + healingPerDelay, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
                 }
 
                 int particleCount = 12;
