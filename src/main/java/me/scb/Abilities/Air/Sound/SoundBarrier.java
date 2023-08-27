@@ -11,6 +11,7 @@ import me.scb.Utils.RainbowColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -78,7 +79,7 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
             for (Entity entity : GeneralMethods.getEntitiesAroundPoint(player.getLocation().add(0,.5,0),2)){
                 if (AbilityUtils.isInValidEntity(entity,player)) continue;
                 DamageHandler.damageEntity(entity,player,1,this);
-                player.setWalkSpeed(.2f);
+                player.setWalkSpeed((float) player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
             }
         }
 
