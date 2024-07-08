@@ -4,6 +4,7 @@ import com.projectkorra.projectkorra.BendingPlayer;
 import com.projectkorra.projectkorra.ability.Ability;
 import com.projectkorra.projectkorra.ability.CoreAbility;
 import com.projectkorra.projectkorra.ability.PassiveAbility;
+import com.projectkorra.projectkorra.event.AbilityLoadEvent;
 import com.projectkorra.projectkorra.event.AbilityStartEvent;
 import com.projectkorra.projectkorra.event.AbilityVelocityAffectEntityEvent;
 import me.scb.Abilities.Air.Sound.BassBoost;
@@ -20,6 +21,7 @@ import me.scb.Abilities.Fire.BlueFire.BlueFireOrbs;
 import me.scb.Abilities.Fire.Combustion.CombustionBomb;
 import me.scb.Abilities.Fire.Lightning.Railgun;
 import me.scb.Abilities.Fire.Lightning.ThunderStorm;
+import me.scb.Abilities.Water.Blood.BloodBlast;
 import me.scb.Abilities.Water.Blood.BloodBlink;
 import me.scb.Abilities.Water.Blood.BloodPool;
 import me.scb.Abilities.Water.Healing.RefreshingRain;
@@ -157,6 +159,8 @@ public class AbilityListener implements Listener {
                 suit.remove();
             else
                 new ChameleonSuit(player);
+        } else if (bound.equalsIgnoreCase("BloodBlast")){
+            new BloodBlast(player);
         }
 
     }
@@ -177,8 +181,9 @@ public class AbilityListener implements Listener {
             }
         }
 
-    }
 
+
+    }
 
     @EventHandler
     public void onFallingBlock(EntityChangeBlockEvent e){

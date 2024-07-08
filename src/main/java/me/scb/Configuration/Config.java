@@ -29,9 +29,6 @@ public class Config {
 
     }
 
-    public FileConfiguration getConfig() {
-        return this.config;
-    }
 
     public void reloadConfig() {
         if (Files.notExists(this.path, new LinkOption[0])) {

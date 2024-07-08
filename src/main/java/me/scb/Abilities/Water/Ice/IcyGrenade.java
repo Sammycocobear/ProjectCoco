@@ -17,6 +17,7 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class IcyGrenade extends IceAbility implements AddonAbility {
     private final double selectRange = ConfigManager.getConfig().getDouble("Abilities.Ice.IcyGrenade.SourceRange");
@@ -33,6 +34,7 @@ public class IcyGrenade extends IceAbility implements AddonAbility {
         if (bPlayer.isOnCooldown(this) || ! bPlayer.canBend(this)) return;
         sourceBlock = BlockSource.getWaterSourceBlock(player, selectRange, ClickType.SHIFT_DOWN, bPlayer.canPlantbend(), bPlayer.canIcebend(), bPlayer.canPlantbend());
         if (sourceBlock == null) return;
+
         start();
     }
 
@@ -114,4 +116,6 @@ public class IcyGrenade extends IceAbility implements AddonAbility {
     public String getVersion() {
         return ProjectCoco.getVersion();
     }
+
+
 }

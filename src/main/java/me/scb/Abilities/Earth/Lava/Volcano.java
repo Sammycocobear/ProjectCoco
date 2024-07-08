@@ -47,7 +47,7 @@ public class Volcano  extends LavaAbility implements AddonAbility {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return false;
     }
 
     public void createVolcano(){

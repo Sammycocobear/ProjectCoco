@@ -41,6 +41,7 @@ public class Railgun extends LightningAbility implements AddonAbility {
         }
         start();
     }
+
     public boolean canShoot(){
         return System.currentTimeMillis() - getStartTime() >= minChargeTime;
     }

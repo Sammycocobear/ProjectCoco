@@ -5,6 +5,7 @@ import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.PassiveAbility;
 import com.projectkorra.projectkorra.util.DamageHandler;
 import me.scb.Abilities.Air.Sound.SoundElement.SoundAbility;
+import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
 import me.scb.Utils.RainbowColor;
@@ -17,9 +18,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveAbility {
-    private static final double MAX_SPEED = .75;
-    private static final int TICKS_PER_SPEED_INCREASE = 5;
-    private static final float acceleration = (float) .02;
+    private final double MAX_SPEED = ConfigManager.getConfig().getDouble("Abilities.Sound.SoundBarrier.MaxSpeed");
+    private final int TICKS_PER_SPEED_INCREASE = ConfigManager.getConfig().getInt("Abilities.Sound.SoundBarrier.SpeedIncreaseTimeInTicks");
+    private final float acceleration = (float)   ConfigManager.getConfig().getDouble("Abilities.Sound.SoundBarrier.Acceleration");
+    private final double damage = ConfigManager.getConfig().getDouble("Abilities.Sound.SoundBarrier.Damage");
+    private final double hitbox = ConfigManager.getConfig().getDouble("Abilities.Sound.SoundBarrier.Hitbox");
+
     private int tickCounter;
     private boolean blastSound = false;
     private double cosX, sinX, cosY, sinY;
@@ -30,6 +34,7 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
     double angle;
     private int index = 0;
 
+    //TODO make stance move, have players overheat from sspeed, make the max speed have duration, if they dont hit anoyne they get slow, speed gets cancelled when you get hit
     @Override
     public void progress() {
         if (!player.isSprinting() || player.isSneaking()) {
@@ -78,7 +83,7 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
             index++;
             for (Entity entity : GeneralMethods.getEntitiesAroundPoint(player.getLocation().add(0,.5,0),2)){
                 if (AbilityUtils.isInValidEntity(entity,player)) continue;
-                DamageHandler.damageEntity(entity,player,1,this);
+                DamageHandler.damageEntity(entity,player,damage,this);
                 player.setWalkSpeed((float) player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
             }
         }

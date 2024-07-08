@@ -23,6 +23,8 @@ public class Hail extends IceAbility implements AddonAbility, ComboAbility {
         start();
     }
 
+    //make move forward and create snow for the waterbender to sue
+
     @Override
     public void progress() {
         List<RainCloud> rainClouds = RainCloud.getRainCloudsInArea(player, ConfigManager.getConfig().getDouble("Abilities.Ice.Hail.SearchRange"));

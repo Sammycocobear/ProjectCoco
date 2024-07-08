@@ -1,6 +1,7 @@
 package me.scb.Configuration;
 
 import me.scb.ProjectCoco;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigManager {
@@ -124,6 +125,12 @@ public class ConfigManager {
         config.addDefault(path + "BloodPool.MaxPools",3);
         config.addDefault(path + "BloodPool.DamageDelay",1000);
 
+        config.addDefault("Abilities.Blood.BloodBlast.Range",20);
+        config.addDefault("Abilities.Blood.BloodBlast.PlayerDamage",1);
+        config.addDefault("Abilities.Blood.BloodBlast.Damage",3);
+        config.addDefault("Abilities.Blood.BloodBlast.Cooldown",4000);
+        config.addDefault("Abilities.Blood.BloodBlast.TimeUntilDamage",1000);
+        config.addDefault("Abilities.Blood.BloodBlast.Speed",5);
 
         path = "Abilities.Ice.";
         config.addDefault(path + "IcyGrenade.SourceRange",20);
@@ -215,7 +222,12 @@ public class ConfigManager {
         config.addDefault(path + "ChameleonSuit.DetectionDistance", 3.0);
         config.addDefault(path + "ChameleonSuit.DisengageOnHit", true);
         config.addDefault(path + "ChameleonSuit.SpeedPotency", 4);
-
+        path = "Abilities.Sound.";
+        config.addDefault("Abilities.Sound.SoundBarrier.MaxSpeed",.75);
+        config.addDefault("Abilities.Sound.SoundBarrier.SpeedIncreaseTimeInTicks",3);
+        config.addDefault("Abilities.Sound.SoundBarrier.Acceleration",.02);
+        config.addDefault("Abilities.Sound.SoundBarrier.Damage",2);
+        config.addDefault("Abilities.Sound.SoundBarrier.Hitbox",2);
         config.options().copyDefaults(true);
         ProjectCoco.getPlugin().saveConfig();
 

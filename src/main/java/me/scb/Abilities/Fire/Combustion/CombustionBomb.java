@@ -184,16 +184,14 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
         for (int i = 0; i < particles; i++) {
             Vector vector = AbilityUtils.getRandomVector().multiply(radius);
             location.add(vector);
-            if (i % 5 == 0){
+            if (i % 5 < 2){
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL,location,1,0,0,0,.1);
-            }else if (i % 5 == 1){
-                location.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,location,1,0,0,0,.1);
             }else{
                 if (RainbowColor.playParticles(player,location,index)) {
                     if (bPlayer.hasSubElement(Element.BLUE_FIRE)){
-                        location.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, location, 1, 0, 0, 0, .1);
+                        location.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, location, 1, 0, 0, 0, .05);
                     }else{
-                        location.getWorld().spawnParticle(Particle.FLAME, location, 1, 0, 0, 0, .1);
+                        location.getWorld().spawnParticle(Particle.FLAME, location, 1, 0, 0, 0, .05);
                     }
                 }
             }
