@@ -228,7 +228,7 @@ public class CombustionBomb extends CombustionAbility implements AddonAbility {
     }
 
     public String getDescription(){
-        return "his ability conjures a menacing thunderstorm overhead. As dark clouds gather, occasional lightning strikes cause damage to entities caught within its reach, delivering a shocking impact.";
+        return "CombustionBomb summons a bouncy bomb that explodes after bouncing or finding an entity.";
     }
 
     @Override

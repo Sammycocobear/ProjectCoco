@@ -40,8 +40,6 @@ public class BloodBlink extends BloodAbility implements AddonAbility {
         if (!(target instanceof LivingEntity)) return;
         s = new SourceAnimation((LivingEntity) target,player);
 
-
-
         start();
     }
     int skipTick = 0;

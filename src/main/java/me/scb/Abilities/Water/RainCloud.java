@@ -46,7 +46,10 @@ public class RainCloud extends WaterAbility implements AddonAbility {
     private Hail hailInstance;
     private boolean applyBoneMeal = ConfigManager.getConfig().getBoolean("Abilities.Water.RainCloud.ApplyBoneMeal");
     private int index;
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     public RainCloud(Player player) {
         super(player);
         if (!bPlayer.canBend(this)) return;
@@ -108,6 +111,7 @@ public class RainCloud extends WaterAbility implements AddonAbility {
         if (System.currentTimeMillis() >= nextDamage){
             for (Entity entity : GeneralMethods.getEntitiesAroundPoint(floorLocation.clone().add(0,height/2,0),radius/1.5)){
                 if (AbilityUtils.isInValidEntity(entity,player)) continue;
+                if (GeneralMethods.isObstructed(entity.getLocation(),floorLocation.clone().add(0,height,0))) continue;
                 DamageHandler.damageEntity(entity,player,damage,hailInstance);
                 ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, slownessDuration, slownessAmplifier));
 

@@ -46,7 +46,10 @@ public class ChameleonSuit extends ChiAbility implements AddonAbility {
 		for (final EquipmentSlot slot : EquipmentSlot.values())
 			NO_EQUIPMENT.put(slot, new ItemStack(Material.AIR));
 	}
-
+	@Override
+	public boolean isEnabled() {
+		return false;
+	}
 	private long cooldown;
 	private World origin;
 

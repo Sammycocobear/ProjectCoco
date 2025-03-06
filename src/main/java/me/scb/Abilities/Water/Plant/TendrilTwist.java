@@ -34,7 +34,10 @@ public class TendrilTwist extends PlantAbility implements AddonAbility {
     private int maxSqueezes = ConfigManager.getConfig().getInt("Abilities.Plant.TendrilTwist.Squeezes");
     private static final Particle.DustTransition dust = new Particle.DustTransition(Color.fromRGB(9,49,2),Color.fromRGB(224,255,219),1);
     private double distance = 0;
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     public TendrilTwist(Player player) {
         super(player);
         final TendrilTwist t = CoreAbility.getAbility(player,getClass());

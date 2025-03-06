@@ -77,7 +77,10 @@ public class Railgun extends LightningAbility implements AddonAbility {
     private void zigZag() {
         zigZags.add(new ZigZag(getRandomLocation(),player));
     }
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     public Location getGround(Location location) {
         final Block standingblock = location.getBlock();
         for (int i = 0; i <= 60; i++) {

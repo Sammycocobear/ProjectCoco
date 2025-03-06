@@ -28,7 +28,10 @@ public class RefreshingRain extends HealingAbility implements AddonAbility {
         if (CoreAbility.hasAbility(player,getClass()) || !bPlayer.canBend(this)) return;
         start();
     }
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     @Override
     public void progress() {
         if (this.player.isDead() || !player.isOnline()) {

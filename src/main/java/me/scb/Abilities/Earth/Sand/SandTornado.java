@@ -3,6 +3,7 @@ package me.scb.Abilities.Earth.Sand;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.SandAbility;
+import com.projectkorra.projectkorra.util.DamageHandler;
 import me.scb.Configuration.ConfigManager;
 import me.scb.ProjectCoco;
 import me.scb.Utils.AbilityUtils;
@@ -28,7 +29,7 @@ public class SandTornado extends SandAbility implements AddonAbility {
     private final double rideSpeed = ConfigManager.getConfig().getDouble("Abilities.Sand.SandTornado.RideSpeed");
     private final long breakTime = ConfigManager.getConfig().getLong("Abilities.Sand.SandTornado.BreakTime");
     private final int sourceRange = ConfigManager.getConfig().getInt("Abilities.Sand.SandTornado.SourceRange");
-
+    private final double damaage = ConfigManager.getConfig().getInt("Abilities.Sand.SandTornado.Damage");
     private boolean isRide,isSeated;
     private boolean hasShot;
     private double angle,angleIncrease;
@@ -181,6 +182,7 @@ public class SandTornado extends SandAbility implements AddonAbility {
             for (Entity entity : GeneralMethods.getEntitiesAroundPoint(loc.clone().add(0,i,0),1)){
                 if (AbilityUtils.isInValidEntity(entity,player)) continue;
                 foundEntity = true;
+                DamageHandler.damageEntity(entity,player,damaage,this);
                 affectedEntity = entity;
                 FallDamageRemoval.addFallDamageCap((LivingEntity) affectedEntity,0);
             }

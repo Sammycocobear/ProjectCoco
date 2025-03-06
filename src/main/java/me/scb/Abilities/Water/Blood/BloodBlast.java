@@ -75,6 +75,11 @@ public class BloodBlast extends BloodAbility implements AddonAbility {
 
     }
 
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
     public void handleBlast(){
         startLocation.add(startLocation.getDirection().multiply(speed));
         if (startLocation.distanceSquared(origin) >= (range * range)){

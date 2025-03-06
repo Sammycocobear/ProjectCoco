@@ -161,7 +161,7 @@ public class SandPad extends SandAbility implements AddonAbility {
     }
 
     public String getDescription(){
-        return "While sneaking on a sand block, the SandPad ability will be activated, propelling you upwards into the air. After a certain duration, the pad will break, causing anyone standing on it to fall down.";
+        return "Once you click while standing on a sand block, the SandPad ability will be activated, propelling you upwards into the air. After a certain duration, the pad will break, causing anyone standing on it to fall down.";
     }
 
     @Override

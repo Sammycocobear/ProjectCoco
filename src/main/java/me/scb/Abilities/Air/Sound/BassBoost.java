@@ -36,6 +36,11 @@ public class BassBoost extends SoundAbility implements AddonAbility {
     }
 
     @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
+    @Override
     public boolean isSneakAbility() {
         return false;
     }

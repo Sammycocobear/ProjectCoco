@@ -45,7 +45,10 @@ public class BlueFireOrbs extends BlueFireAbility implements AddonAbility {
 
         start();
     }
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     public void makeSphere(Location location){
         for (int i = 0; i < 5; i++) {
             location.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,location.clone().add(AbilityUtils.getRandomVector().multiply(.5)),1,0,0,0, ThreadLocalRandom.current().nextBoolean() ? 0 : .05);

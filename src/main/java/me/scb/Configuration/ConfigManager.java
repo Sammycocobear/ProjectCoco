@@ -41,6 +41,8 @@ public class ConfigManager {
         config.addDefault(path + "SandTornado.Cooldown",5000);
         config.addDefault(path + "SandTornado.SourceRange",10);
         config.addDefault(path + "SandTornado.Range",20);
+        config.addDefault(path + "SandTornado.Damage",2);
+
         config.addDefault(path + "SandTornado.ShootSpeed",.5);
         config.addDefault(path + "SandTornado.RideSpeed",.5);
         config.addDefault(path + "SandTornado.SeatingSpeed",.5);
@@ -58,10 +60,10 @@ public class ConfigManager {
 
         config.addDefault(path + "SandPad.Radius",4);
         config.addDefault(path + "SandPad.Duration",5000);
-        config.addDefault(path + "SandPad.Height",10);
+        config.addDefault(path + "SandPad.Height",15);
         config.addDefault(path + "SandPad.Cooldown",7000);
         config.addDefault(path + "SandPad.FailedCooldown",3000);
-        config.addDefault(path + "SandPad.RiseSpeed",1.25);
+        config.addDefault(path + "SandPad.RiseSpeed",.75);
 
         config.addDefault("Abilities.Lava.VolcanicJets.Jets",3);
         config.addDefault("Abilities.Lava.VolcanicJets.Range",12);
@@ -72,16 +74,16 @@ public class ConfigManager {
 
         path = "Abilities.Combustion.";
 
-        config.addDefault(path + "CombustionBomb.Gravity",.05);
-        config.addDefault(path + "CombustionBomb.Speed",.25);
+        config.addDefault(path + "CombustionBomb.Gravity",.1);
+        config.addDefault(path + "CombustionBomb.Speed",.4);
         config.addDefault(path + "CombustionBomb.MaxHeight",1);
         config.addDefault(path + "CombustionBomb.EndExplosion.IncreaseSpeed",.5);
         config.addDefault(path + "CombustionBomb.EndExplosion.MaxRadius",5);
         config.addDefault(path + "CombustionBomb.EndExplosion.Spheres",6);
         config.addDefault(path + "CombustionBomb.Hitbox",1.5);
-        config.addDefault(path + "CombustionBomb.Damage",2);
-        config.addDefault(path + "CombustionBomb.Cooldown",7000);
-        config.addDefault(path + "CombustionBomb.MaxBounces",3);
+        config.addDefault(path + "CombustionBomb.Damage",1.5);
+        config.addDefault(path + "CombustionBomb.Cooldown",8000);
+        config.addDefault(path + "CombustionBomb.MaxBounces",2);
 
         path = "Abilities.Lightning.";
         config.addDefault(path + "Railgun.MinimumChargeTime",1000);
@@ -109,7 +111,6 @@ public class ConfigManager {
         config.addDefault(path + "BlueFireOrbs.Speed",1);
 
         path = "Abilities.Blood.";
-        config.addDefault(path + "BloodRush.Range",20);
         config.addDefault(path + "BloodBlink.SourceRange",20);
         config.addDefault(path + "BloodBlink.SpeedAmplifier",2);
         config.addDefault(path + "BloodBlink.Duration",7000);

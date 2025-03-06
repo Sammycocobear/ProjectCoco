@@ -12,7 +12,10 @@ public class MetalKunais extends MetalAbility implements AddonAbility {
     public MetalKunais(Player player) {
         super(player);
     }
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     @Override
     public void progress() {
 

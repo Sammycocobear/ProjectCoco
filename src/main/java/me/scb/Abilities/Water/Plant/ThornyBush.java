@@ -44,7 +44,10 @@ public class ThornyBush extends PlantAbility implements AddonAbility {
         if (CoreAbility.hasAbility(player,getClass()) || !bPlayer.canBendIgnoreBinds(this)) return;
         start();
     }
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     public void setThorns(Location startLoc){
         for (int i = 1; i < thorns + 1; i++) {
             double x1 = (1 * Math.sin(Math.toRadians(360.0 / thorns) * i));

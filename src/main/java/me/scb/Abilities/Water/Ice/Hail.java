@@ -38,7 +38,10 @@ public class Hail extends IceAbility implements AddonAbility, ComboAbility {
         return;
     }
 
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     @Override
     public void remove() {
         super.remove();

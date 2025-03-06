@@ -44,7 +44,10 @@ public class QuickSand extends SandAbility implements AddonAbility {
 
         start();
     }
-
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
     public void makeCircle() {
 
         if (System.currentTimeMillis() >= next && radius < maxRadius) {

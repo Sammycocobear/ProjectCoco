@@ -21,15 +21,15 @@ public class Reconfigure extends MetalAbility implements AddonAbility {
             Material.IRON_AXE,
             Material.IRON_SHOVEL,
             Material.IRON_PICKAXE,
-            Material.IRON_SWORD,
+//            Material.IRON_SWORD,
             Material.SHEARS
     );
     private static final ImmutableSet<ItemStack> TOOL_ITEMS = ImmutableSet.of(
             new ItemStack(Material.IRON_HOE, 1),
             new ItemStack(Material.IRON_AXE, 1),
             new ItemStack(Material.IRON_SHOVEL, 1),
-            new ItemStack(Material.IRON_PICKAXE, 1),
-            new ItemStack(Material.IRON_SWORD, 1)
+            new ItemStack(Material.IRON_PICKAXE, 1)
+//            new ItemStack(Material.IRON_SWORD, 1)
 
     );
 
@@ -43,6 +43,11 @@ public class Reconfigure extends MetalAbility implements AddonAbility {
                 .max(Comparator.comparingDouble(block::getDestroySpeed))
                 .map(ItemStack::getType)
                 .orElse(null);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 
     public Reconfigure(final Player player) {

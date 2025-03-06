@@ -34,6 +34,11 @@ public class SoundBarrier extends SoundAbility implements AddonAbility, PassiveA
     double angle;
     private int index = 0;
 
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
     //TODO make stance move, have players overheat from sspeed, make the max speed have duration, if they dont hit anoyne they get slow, speed gets cancelled when you get hit
     @Override
     public void progress() {
